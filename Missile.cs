@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Missile : MonoBehaviour
 {
@@ -10,82 +7,65 @@ public class Missile : MonoBehaviour
     private float radius = 5f;
     public float speed;
     public float rotateSpeed = 200f;
-    
+
     //Constants for the script
     //missile
-    public GameObject missile;
-    public GameObject missilePrefab;
     private Rigidbody missileRigidbody;
+    //public ShootMissile shootMissile;
+    public GameObject missilePrefab;
+    public GameObject missileObject;
+    public Vector3 offsetForMissileShot;//offset from the player
+    public Transform playerTransform;//so that we can shoot the missile from the player location
     //target-astroid
-    private Transform targetTransform;
+    public Transform targetTransform;
     public GameObject targetObject;
+    public ObstacleMovement obstacleMovementScript;
     //time
     public float timeBetweenSpawns = 2f;
     public float timeToSpawn = 1f;
 
-
-    private void Start()
-    {
-        FindTarget();
-        ShootMissile();
-    }
     private void FixedUpdate()
     {
-        if (missile != null && targetObject != null)
+        //Getting the target that the player has pressed from obstacle script
+        /*if (obstacleMovementScript.targetTransform != null && obstacleMovementScript.targetObject != null)
         {
-            Vector3 direction = targetTransform.position - missile.transform.position;
-            direction.Normalize();
+            targetObject = obstacleMovementScript.targetObject;
+            targetTransform = obstacleMovementScript.targetTransform;
+        }*/
+        int missileCount = GameObject.FindGameObjectsWithTag("Missile").Length;
 
-            float rotateAmount = Vector3.Cross(direction, missile.transform.forward).y;
+        if (missileObject != null && targetObject != null)
+        {
+            Vector3 direction = targetTransform.position - missileObject.transform.position;
+            direction.Normalize();//so that we can cross the direction and the missile position
+
+            float rotateAmount = Vector3.Cross(direction, missileObject.transform.forward).y;//crossing
 
             missileRigidbody.angularVelocity = new Vector3(0, -rotateAmount * rotateSpeed, 0);
 
-            missileRigidbody.velocity = missile.transform.forward * speed;
+            missileRigidbody.velocity = missileObject.transform.forward * speed;
         }
-        else if (missile == null)
+        else if (targetObject != null && missileCount == 0)
         {
-            if (Time.timeSinceLevelLoad >= timeToSpawn && missile == null)
-            {
-                FindTarget();
-                ShootMissile();
-                timeToSpawn += timeBetweenSpawns;
-            }
-        }
-        else if (targetObject == null)
-        {
-            FindTarget();
+            ShootTheMissile();
         }
     }
-    public void ShootMissile()
+
+    private void OnCollisionEnter(UnityEngine.Collision collision)
     {
-        Vector3 playerTransformForMissile = new Vector3(gameObject.transform.position.x,
-            gameObject.transform.position.y, gameObject.transform.position.z + 3f);
-
-        missile = Instantiate(missilePrefab, playerTransformForMissile, Quaternion.identity);
-        missileRigidbody = missile.GetComponent<Rigidbody>();
-
-        if (targetObject == null)
+        if (collision.collider.tag == "Clone")//missile has hit an astroid
         {
-            Vector2 direction1 = (Vector2)gameObject.transform.position - (Vector2)missileRigidbody.position;
-
-            direction1.Normalize();
-
-            float rotateAmount = Vector3.Cross(direction1, missile.transform.forward).y;
-
-            missileRigidbody.angularVelocity = new Vector3(0, rotateAmount * rotateSpeed, 0);
-
-            missileRigidbody.velocity = missile.transform.forward * speed;
+            Destroy(missileObject.gameObject);
+            //destroying the object that we collided with rather than the target
+            //because that we may accidently collide with a different obstacle
+            //Destroy(collision.collider);
+            Destroy(collision.collider.gameObject);
         }
     }
-    public void FindTarget()
+    void ShootTheMissile()
     {
-        GameObject[] astroidsToPickFrom = GameObject.FindGameObjectsWithTag("Clone");
-        if (astroidsToPickFrom.Length > 0)
-        {
-            int targetRandom = UnityEngine.Random.Range(0, astroidsToPickFrom.Length);
-
-            targetTransform = astroidsToPickFrom[targetRandom].transform;
-            targetObject = astroidsToPickFrom[targetRandom];
-        }
+        missileObject = Instantiate(missilePrefab, playerTransform.position + offsetForMissileShot,
+            Quaternion.identity);
+        missileRigidbody = missileObject.GetComponent<Rigidbody>();
     }
 }

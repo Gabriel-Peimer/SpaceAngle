@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerHealthHandling : MonoBehaviour
 {
@@ -8,7 +6,6 @@ public class PlayerHealthHandling : MonoBehaviour
     public float currentHealth;
 
     public PlayerMovement playerMovement;
-    public TimeManager timeManager;
     public HealthBar healthBar;
 
     void Start()
@@ -19,7 +16,7 @@ public class PlayerHealthHandling : MonoBehaviour
 
     void Update()
     {
-        currentHealth = Mathf.Clamp(currentHealth, 0f, 2f);
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
 
         if (playerMovement.hasTouchEnded == false)
         {

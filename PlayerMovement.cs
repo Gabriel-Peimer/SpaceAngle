@@ -44,6 +44,10 @@ public class PlayerMovement : MonoBehaviour
                 transform.Rotate(rotation * Time.fixedDeltaTime);
             }
         }
+        if (Input.GetKey("m"))
+        {
+            timeManager.DoSlowmotion();
+        }
         
 
         if (Input.touchCount > 0)

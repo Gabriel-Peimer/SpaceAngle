@@ -2,10 +2,27 @@
 
 public class ObstacleMovement : MonoBehaviour
 {
-    public Rigidbody rb;
+    public Rigidbody obstacle;
     public float movementForce;
+    private Missile missileScript;
+
+    //for missile script
+    public Transform targetTransform;
+    public GameObject targetObject;
+    private GameObject player;
+
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        missileScript = player.GetComponent<Missile>();
+    }
     void FixedUpdate()
     {
-        rb.AddForce(0, 0, -movementForce * Time.fixedDeltaTime);
+        obstacle.AddForce(0, 0, -movementForce * Time.fixedDeltaTime);
+    }
+    private void OnMouseDown()
+    {
+        missileScript.targetTransform = gameObject.transform;
+        missileScript.targetObject = gameObject;
     }
 }
