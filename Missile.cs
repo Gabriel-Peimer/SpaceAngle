@@ -2,16 +2,20 @@
 
 public class Missile : MonoBehaviour
 {
-    //May want to change with upgrades
-    public int missileStrength = 0;
-    private float radius = 5f;
-    public float speed;
-    public float rotateSpeed = 200f;
+    //May want to change with upgrades --- TODO ---
+    
+    public int missileStrength = 0; // will be used to see what size obstacle the missile can break
+    public float missileSpeed;
+    public float missileRotateSpeed = 200f;
+    
+    //time (still may be changed with upgrades)
+    //public float timeBetweenSpawns = 2f;
+    //public float timeToSpawn = 1f;
+    
 
-    //Constants for the script
+    //Constants for the script/ things that upgrades will not change
     //missile
     private Rigidbody missileRigidbody;
-    //public ShootMissile shootMissile;
     public GameObject missilePrefab;
     public GameObject missileObject;
     public Vector3 offsetForMissileShot;//offset from the player
@@ -20,18 +24,9 @@ public class Missile : MonoBehaviour
     public Transform targetTransform;
     public GameObject targetObject;
     public ObstacleMovement obstacleMovementScript;
-    //time
-    public float timeBetweenSpawns = 2f;
-    public float timeToSpawn = 1f;
 
     private void FixedUpdate()
     {
-        //Getting the target that the player has pressed from obstacle script
-        /*if (obstacleMovementScript.targetTransform != null && obstacleMovementScript.targetObject != null)
-        {
-            targetObject = obstacleMovementScript.targetObject;
-            targetTransform = obstacleMovementScript.targetTransform;
-        }*/
         int missileCount = GameObject.FindGameObjectsWithTag("Missile").Length;
 
         if (missileObject != null && targetObject != null)
@@ -41,9 +36,9 @@ public class Missile : MonoBehaviour
 
             float rotateAmount = Vector3.Cross(direction, missileObject.transform.forward).y;//crossing
 
-            missileRigidbody.angularVelocity = new Vector3(0, -rotateAmount * rotateSpeed, 0);
+            missileRigidbody.angularVelocity = new Vector3(0, -rotateAmount * missileRotateSpeed, 0);
 
-            missileRigidbody.velocity = missileObject.transform.forward * speed;
+            missileRigidbody.velocity = missileObject.transform.forward * missileSpeed;
         }
         else if (targetObject != null && missileCount == 0)
         {
@@ -51,17 +46,18 @@ public class Missile : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(UnityEngine.Collision collision)
+    /*private void OnCollisionEnter(UnityEngine.Collision collision)
     {
         if (collision.collider.tag == "Clone")//missile has hit an astroid
         {
             Destroy(missileObject.gameObject);
+            Debug.Log(missileObject);
             //destroying the object that we collided with rather than the target
             //because that we may accidently collide with a different obstacle
             //Destroy(collision.collider);
             Destroy(collision.collider.gameObject);
         }
-    }
+    }*/
     void ShootTheMissile()
     {
         missileObject = Instantiate(missilePrefab, playerTransform.position + offsetForMissileShot,
