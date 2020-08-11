@@ -11,13 +11,12 @@ public class Collision : MonoBehaviour
     public GameObject explosionEffect;
 
     public float explosionForce = 300f;
-    public float radius = 2f;
+    public float searchRadius = 2f;
 
     void OnCollisionEnter(UnityEngine.Collision collision)
     {
         if (collision.collider.tag == "Obstacle" ||
-            collision.collider.tag == "Clone" ||
-            collision.collider.tag == "WallClone")
+            collision.collider.tag == "Clone")
         {
             ChangeShip();
             Explode();
@@ -26,26 +25,31 @@ public class Collision : MonoBehaviour
             gameManager.PlayerLost();
         }
     }
-    void ChangeShip()
+    private void ChangeShip()
     {
-        float xRotation = player.transform.rotation.eulerAngles.x + crackedShipPrefab.transform.rotation.eulerAngles.x;
-        float yRotation = player.transform.rotation.eulerAngles.y + crackedShipPrefab.transform.rotation.eulerAngles.y;
+        float xRotation = player.transform.rotation.eulerAngles.x +
+            crackedShipPrefab.transform.rotation.eulerAngles.x;
+        float yRotation = player.transform.rotation.eulerAngles.y +
+            crackedShipPrefab.transform.rotation.eulerAngles.y;
         float zRotation = crackedShipPrefab.transform.rotation.eulerAngles.z;
-        Instantiate(crackedShipPrefab, playerRigidbody.transform.position, Quaternion.Euler(xRotation, yRotation, zRotation));
+        
+        Instantiate(crackedShipPrefab, playerRigidbody.transform.position,
+            Quaternion.Euler(xRotation, yRotation, zRotation));
+
         player.SetActive(false);
     }
-    void Explode()
+    private void Explode()
     {
         Instantiate(explosionEffect, transform.position, transform.rotation);
 
-        Collider[] collidersToMove = Physics.OverlapSphere(transform.position, radius);
+        Collider[] collidersToMove = Physics.OverlapSphere(transform.position, searchRadius);
 
         foreach (Collider nearbyObject in collidersToMove)
         {
             Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.AddExplosionForce(explosionForce, transform.position, radius);
+                rb.AddExplosionForce(explosionForce, transform.position, searchRadius);
             }
         }
     }

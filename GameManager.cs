@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 
     public ScoreDisplayAtCollision scoreDisplayAtCollision;//keeps the score
     public GameObject gameEndUI;//called when player dies
+    public Shop shop;//for save and load
     public Rigidbody player;//so that the player doesn't stay frozen (turning off constraints)
 
     //scripts and objects that need to be turned off at the end off the game
@@ -36,5 +37,17 @@ public class GameManager : MonoBehaviour
     public void PlayerLost()
     {
         gameEndUI.SetActive(true);
+    }
+
+    //Save and load system
+    public void SaveProgress()
+    {
+        SavePlayerData.SavePlayerProgress(shop);
+    }
+    public void LoadProgress()
+    {
+        PlayerData data = SavePlayerData.LoadPlayerData();
+        shop.missileUpgradeValue = data.missileUpgradeValue;
+        shop.slowMotionUpgradeValue = data.slowMotionUpgradeValue;
     }
 }

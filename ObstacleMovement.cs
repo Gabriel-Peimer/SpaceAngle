@@ -24,5 +24,7 @@ public class ObstacleMovement : MonoBehaviour
     {
         missileScript.targetTransform = gameObject.transform;
         missileScript.targetObject = gameObject;
+
+        targetObject = gameObject;
     }
 }

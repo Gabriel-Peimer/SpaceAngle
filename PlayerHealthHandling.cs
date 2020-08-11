@@ -13,7 +13,7 @@ public class PlayerHealthHandling : MonoBehaviour
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
     }
-
+    /*
     void Update()
     {
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
@@ -27,5 +27,5 @@ public class PlayerHealthHandling : MonoBehaviour
             currentHealth += 1f * Time.deltaTime;
         }
         healthBar.SetHealth(currentHealth);
-    }
+    }*/
 }

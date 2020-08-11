@@ -2,20 +2,27 @@
 
 public class Shop : MonoBehaviour
 {
+    //shop and endscreen objects
     public GameObject shop;
     public GameObject endScreen;
     public GameObject goToShopButton;
     public GameObject[] buttons;
     public GameObject closeShopButton;
-    private Animation closeShop;
-    public GameObject closeShopController;
+    //public Animation closeShop;
+    //public GameObject closeShopController;
+    
+    //save and load
+    public GameManager gameManager;
 
     //For shop upgrades:
-    public TimeManager timeManager;
+    //public TimeManager timeManager;
 
-    private int missileUpgradeValue;
-    private int slowMotionUpgradeValue;
-    private bool hasMissileUpgrade;
+    //missile
+    public int missileUpgradeValue;
+    public int maxMissileUpgradeValue = 1;
+    //slow-motion
+    public int slowMotionUpgradeValue;
+    private int maxSlowMotionUpgradeValue;
 
     public void ShowShop()
     {
@@ -29,13 +36,11 @@ public class Shop : MonoBehaviour
     public void ReturnToMainMenu()
     {
         //closeShop = closeShopButton.GetComponent<Animation>();
-        //closeShopController.SetActive(true);
-        //closeShop.Play("CloseShop");
-        //if (closeShop.isPlaying == false)
-        //{
-            shop.SetActive(false);
-            endScreen.SetActive(true);
-        //}
+        //closeShop.Play();
+        shop.SetActive(false);
+        endScreen.SetActive(true);
+
+        gameManager.SaveProgress();
     }
     public void ShowShopButtons()
     {
@@ -47,14 +52,14 @@ public class Shop : MonoBehaviour
     public void UpgradeSlowMotion()
     {
         //adds 10% to slowdown factor
-        timeManager.slowDownFactor += timeManager.slowDownFactor / 10;
-        slowMotionUpgradeValue += 1;
+        //timeManager.slowDownFactor += timeManager.slowDownFactor / 10;
+        //slowMotionUpgradeValue += 1;
     }
     public void UpgradeMissile()
     {
-        if (missileUpgradeValue < 1)// this is the first upgrade
+        if (missileUpgradeValue < maxMissileUpgradeValue)
         {
-            hasMissileUpgrade = true;
+            missileUpgradeValue += 1;
         }
     }
 }
