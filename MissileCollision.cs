@@ -50,17 +50,16 @@ public class MissileCollision : MonoBehaviour
             Destroy(collision.collider.gameObject);
             
             ExplodeAstroid();
-            Destroy(shootMissileScript.missileObject.gameObject);
+            //the missile is then destroyed in the Missile script
         }
     }
     private void ChangeAstroid()//changes the astroid with the cracked prefab
     {
         crackedAstroidObject = Instantiate(crackedAstroidPrefab, ObstacleTransform.position,
             ObstacleTransform.rotation);
-        Debug.Log(crackedAstroidObject);
         crackedAstroidStartTime = Time.timeSinceLevelLoad;
     }
-    private void ExplodeAstroid()
+    public void ExplodeAstroid()//public so it can be used in Missile script
     {
         Instantiate(explosionEffect, transform.position, transform.rotation);
 

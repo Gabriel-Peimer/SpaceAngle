@@ -60,6 +60,10 @@ public class Missile : MonoBehaviour
                 targetObject = null;
                 targetTransform = null;
             }
+            else if (targetObject == null && missileObject != null)
+            {
+                Destroy(missileObject.gameObject);
+            }
         }
     }
     void ShootTheMissile()

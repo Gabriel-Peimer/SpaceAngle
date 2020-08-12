@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Shop : MonoBehaviour
 {
@@ -35,12 +36,7 @@ public class Shop : MonoBehaviour
     }
     public void ReturnToMainMenu()
     {
-        //closeShop = closeShopButton.GetComponent<Animation>();
-        //closeShop.Play();
-        shop.SetActive(false);
-        endScreen.SetActive(true);
-
-        gameManager.SaveProgress();
+        SceneManager.LoadScene("MainMenu");
     }
     public void ShowShopButtons()
     {
@@ -54,12 +50,14 @@ public class Shop : MonoBehaviour
         //adds 10% to slowdown factor
         //timeManager.slowDownFactor += timeManager.slowDownFactor / 10;
         //slowMotionUpgradeValue += 1;
+        gameManager.SaveProgress();
     }
     public void UpgradeMissile()
     {
         if (missileUpgradeValue < maxMissileUpgradeValue)
         {
             missileUpgradeValue += 1;
+            gameManager.SaveProgress();
         }
     }
 }
