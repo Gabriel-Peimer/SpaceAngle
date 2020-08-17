@@ -5,13 +5,13 @@ using System.Runtime.Serialization;
 
 public static class SavePlayerData
 {
-    public static void SavePlayerProgress(Shop shop)
+    public static void SavePlayerProgress(GameMaster gameMaster)
     {
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/player.bin";
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        PlayerData playerData = new PlayerData(shop);
+        PlayerData playerData = new PlayerData(gameMaster);
 
         binaryFormatter.Serialize(stream, playerData);
         stream.Close();

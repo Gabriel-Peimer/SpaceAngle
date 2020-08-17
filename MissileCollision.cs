@@ -53,7 +53,7 @@ public class MissileCollision : MonoBehaviour
             //the missile is then destroyed in the Missile script
         }
     }
-    private void ChangeAstroid()//changes the astroid with the cracked prefab
+    public void ChangeAstroid()//changes the astroid with the cracked prefab
     {
         crackedAstroidObject = Instantiate(crackedAstroidPrefab, ObstacleTransform.position,
             ObstacleTransform.rotation);

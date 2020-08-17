@@ -3,23 +3,27 @@ using UnityEngine;
 
 public class Collision : MonoBehaviour
 {
-    public GameObject crackedShipPrefab;
     public GameObject player;
     public Rigidbody playerRigidbody;
     public GameManager gameManager;
+    public GameObject crackedAstroidPrefab;//for ChangeAstroid
+    public GameObject crackedShipPrefab;
 
     public GameObject explosionEffect;
 
     public float explosionForce = 300f;
     public float searchRadius = 2f;
+    private float explosionForceForAstroid = 50;
 
     void OnCollisionEnter(UnityEngine.Collision collision)
     {
         if (collision.collider.tag == "Obstacle" ||
             collision.collider.tag == "Clone")
         {
-            ChangeShip();
-            Explode();
+            ChangeShip();//swapes ship with cracked mesh
+            Explode();//explodes ship
+            ChangeAstroid(collision.collider.gameObject);//swapes astroid with cracked mesh
+            ExplodeAstroid();//explodes astroid
 
             gameManager.GameOver();
             gameManager.PlayerLost();
@@ -52,5 +56,23 @@ public class Collision : MonoBehaviour
                 rb.AddExplosionForce(explosionForce, transform.position, searchRadius);
             }
         }
+    }
+    private void ExplodeAstroid()
+    {
+        Collider[] collidersToMove = Physics.OverlapSphere(transform.position, searchRadius);
+
+        foreach (Collider nearbyObject in collidersToMove)
+        {
+            Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.AddExplosionForce(explosionForceForAstroid, transform.position, searchRadius);
+            }
+        }
+    }
+    private void ChangeAstroid(GameObject collider)
+    {
+        Instantiate(crackedAstroidPrefab, collider.transform.position, collider.transform.rotation);
+        Destroy(collider);
     }
 }

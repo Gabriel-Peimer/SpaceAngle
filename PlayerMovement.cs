@@ -2,13 +2,11 @@
 
 public class PlayerMovement : MonoBehaviour
 {
-    public GameManager gameManager;//for loading data
-
-
     public float sideForce = 500f;
     public Rigidbody player;
     public ObstacleMovement obstacleMovement;
     public TimeManager timeManager;
+    public Shop shop;
 
     private Vector3 firstPosition;
     private Vector3 lastPosition;
@@ -30,7 +28,9 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         dragDistance = Screen.height * 5 / 100;
-        gameManager.LoadProgress();
+        GameObject gameMasterObject = GameObject.Find("GameMaster");
+        GameMaster gameMaster = gameMasterObject.GetComponent<GameMaster>();
+        GameManager.LoadProgress(gameMaster);
     }
     void FixedUpdate()
     {

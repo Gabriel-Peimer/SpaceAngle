@@ -5,59 +5,37 @@ public class Shop : MonoBehaviour
 {
     //shop and endscreen objects
     public GameObject shop;
-    public GameObject endScreen;
-    public GameObject goToShopButton;
-    public GameObject[] buttons;
-    public GameObject closeShopButton;
-    //public Animation closeShop;
-    //public GameObject closeShopController;
-    
-    //save and load
-    public GameManager gameManager;
-
-    //For shop upgrades:
-    //public TimeManager timeManager;
+    private GameObject gameMasterObject;
+    private GameMaster gameMaster;
 
     //missile
     public int missileUpgradeValue;
-    public int maxMissileUpgradeValue = 1;
+    public int maxMissileUpgradeValue = 2;
     //slow-motion
+    //public TimeManager timeManager;
     public int slowMotionUpgradeValue;
     private int maxSlowMotionUpgradeValue;
 
-    public void ShowShop()
+    private void Awake()
     {
-        shop.SetActive(true);
-        endScreen.SetActive(false);
-    }
-    public void ShowShopButton()
-    {
-        goToShopButton.SetActive(true);
+        gameMasterObject = GameObject.Find("GameMaster");
+        gameMaster = gameMasterObject.GetComponent<GameMaster>();
     }
     public void ReturnToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
     }
-    public void ShowShopButtons()
-    {
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            buttons[i].SetActive(true);
-        }
-    }
     public void UpgradeSlowMotion()
     {
-        //adds 10% to slowdown factor
-        //timeManager.slowDownFactor += timeManager.slowDownFactor / 10;
-        //slowMotionUpgradeValue += 1;
-        gameManager.SaveProgress();
+        gameMaster.slowMotionUpgradeValue++;
+        //GameManager.SaveProgress(this);
     }
     public void UpgradeMissile()
     {
-        if (missileUpgradeValue < maxMissileUpgradeValue)
+        if (gameMaster.missileUpgradeValue < maxMissileUpgradeValue)
         {
-            missileUpgradeValue += 1;
-            gameManager.SaveProgress();
+            gameMaster.missileUpgradeValue++;
+            GameManager.SaveProgress(gameMaster);
         }
     }
 }

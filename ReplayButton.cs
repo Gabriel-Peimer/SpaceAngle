@@ -8,6 +8,7 @@ public class ReplayButton : MonoBehaviour
     public float restartDelay = 1f;
     public GameObject replayButton;
     public GameObject healthBar;
+    public GameObject goToShopButton;
 
     public void Replay()
     {
@@ -18,9 +19,14 @@ public class ReplayButton : MonoBehaviour
         obstacleGeneration.score = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    public void ShowButton()
+    public void GoToShop()
+    {
+        SceneManager.LoadScene("Shop");
+    }
+    public void ShowButtons()
     {
         replayButton.SetActive(true);
+        goToShopButton.SetActive(true);
     }
     public void HideHealthBar()
     {

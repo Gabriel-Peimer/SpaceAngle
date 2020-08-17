@@ -15,8 +15,10 @@ public class Missile : MonoBehaviour
 
 
     //Constants for the script/ things that upgrades will not change
+    //GameMaster
+    private GameObject gameMasterObject;
+    private GameMaster gameMaster;
     //missile
-    public Shop shop;
     private Rigidbody missileRigidbody;
     public GameObject missilePrefab;
     public GameObject missileObject;
@@ -27,9 +29,14 @@ public class Missile : MonoBehaviour
     public GameObject targetObject;
     public ObstacleMovement obstacleMovementScript;
 
+    private void Start()
+    {
+        gameMasterObject = GameObject.Find("GameMaster");
+        gameMaster = gameMasterObject.GetComponent<GameMaster>();
+    }
     private void FixedUpdate()
     {
-        if (shop.missileUpgradeValue > 0)
+        if (gameMaster.missileUpgradeValue > 0)
         {
             if (timeForPossibleShot < Time.timeSinceLevelLoad)
             {

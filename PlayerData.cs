@@ -5,15 +5,16 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData
 {
-    //Shop upgrades to be stored
+    //upgrades to be stored
     public int missileUpgradeValue;
     public int slowMotionUpgradeValue;
+    
+    public int playerHighScore;
 
-    //public int playerHighScore;
-
-    public PlayerData(Shop shop)
+    public PlayerData(GameMaster gameMaster)
     {
-        missileUpgradeValue = shop.missileUpgradeValue;
-        slowMotionUpgradeValue = shop.slowMotionUpgradeValue;
+        missileUpgradeValue = gameMaster.missileUpgradeValue;
+        slowMotionUpgradeValue = gameMaster.slowMotionUpgradeValue;
+        playerHighScore = gameMaster.playerHighScore;
     }
 }

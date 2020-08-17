@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    private void PlayButton()
+    public void PlayButton()
     {
         SceneManager.LoadScene("Gameplay");
     }
-    private void ShopButton()
+    public void ShopButton()
     {
         SceneManager.LoadScene("Shop");
     }
