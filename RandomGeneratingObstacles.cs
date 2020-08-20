@@ -4,9 +4,8 @@ using UnityEngine.UI;
 
 public class RandomGeneratingObstacles : MonoBehaviour
 {
-    public GameManager GameManager;
-    public Transform[] spawnPoints;
-    public GameObject blockPrefab;
+    public Transform spawnCube;
+    public GameObject astroidPrefab;
 
     public float timeBetweenSpawns = 1f;
     public float timeToSpawn = 1f;
@@ -15,7 +14,7 @@ public class RandomGeneratingObstacles : MonoBehaviour
 
     public Text scoreText;
     public int score;
-    int randomNumber = -1;
+    float randomNumber;
     private void Update()
     {
         if (Time.timeSinceLevelLoad >= timeToSpawn)
@@ -31,29 +30,23 @@ public class RandomGeneratingObstacles : MonoBehaviour
 
     private void SpawnBlocks()
     {
-        randomNumber = UnityEngine.Random.Range(0, spawnPoints.Length);
-        for (int i = 0; i < spawnPoints.Length; i++)
+
+        randomNumber = UnityEngine.Random.Range(-spawnCube.lossyScale.x / 2, spawnCube.lossyScale.x / 2);
+
+        float randomX = UnityEngine.Random.Range(0, 359);
+        float randomY = UnityEngine.Random.Range(0, 359);
+        float randomZ = UnityEngine.Random.Range(0, 359);
+
+        Instantiate(astroidPrefab, spawnCube.position + new Vector3(randomNumber, 0, 0),
+            Quaternion.Euler(randomX, randomY, randomZ));//instantiates with random rotation (at random position)
+
+        GameObject[] clones = GameObject.FindGameObjectsWithTag("Clone");
+
+        foreach (GameObject clone in clones)
         {
-            if (randomNumber == i)
+            if (clone.transform.position.z <= -10)
             {
-                float randomX = UnityEngine.Random.Range(0, 359);
-                float randomY = UnityEngine.Random.Range(0, 359);
-                float randomZ = UnityEngine.Random.Range(0, 359);
-                Instantiate(blockPrefab, spawnPoints[i].position, Quaternion.identity);
-                GameObject[] clones = GameObject.FindGameObjectsWithTag("Clone");
-                foreach(GameObject clone in clones)
-                {
-                    if (clone.transform.rotation.x == 0 &&
-                        clone.transform.rotation.y == 0 &&
-                        clone.transform.rotation.z == 0)
-                    {
-                        clone.transform.Rotate(randomX, randomY, randomZ);
-                    }
-                    if (clone.transform.position.z <= -10)
-                    {
-                        Destroy(clone);
-                    }
-                }
+                Destroy(clone);
             }
         }
     }

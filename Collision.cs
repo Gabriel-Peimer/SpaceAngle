@@ -27,6 +27,13 @@ public class Collision : MonoBehaviour
 
             gameManager.GameOver();
             gameManager.PlayerLost();
+        }else if (collision.collider.tag == "WallClone")
+        {
+            ChangeShip();//swapes ship with cracked mesh
+            Explode();//explodes ship
+
+            gameManager.GameOver();
+            gameManager.PlayerLost();
         }
     }
     private void ChangeShip()

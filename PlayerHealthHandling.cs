@@ -8,11 +8,11 @@ public class PlayerHealthHandling : MonoBehaviour
     public PlayerMovement playerMovement;
     public HealthBar healthBar;
 
-    void Start()
-    {
-        currentHealth = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
-    }
+    //void Start()
+    //{
+    //   currentHealth = maxHealth;
+    //    healthBar.SetMaxHealth(maxHealth);
+    //}
     /*
     void Update()
     {

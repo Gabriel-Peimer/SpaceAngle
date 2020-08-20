@@ -13,8 +13,7 @@ public class MissileCollision : MonoBehaviour
     public GameObject crackedAstroidPrefab;
     private Transform ObstacleTransform;
     private GameObject crackedAstroidObject;
-    private float crackedAstroidStartTime;//to see in how long we need to destroy remnents
-    private float timeForCrackedAstroidDestruction = 3f;
+    private float timeForCrackedAstroidDestruction = 3f;//to be used for destroying cracked astroid after x time
 
     private void Start()
     {
@@ -32,10 +31,6 @@ public class MissileCollision : MonoBehaviour
         {
             Destroy(shootMissileScript.missileObject.gameObject);
         }
-        if (crackedAstroidStartTime + timeForCrackedAstroidDestruction < Time.timeSinceLevelLoad)
-        {
-            Destroy(crackedAstroidObject.gameObject);
-        }
     }
 
     private void OnCollisionEnter(UnityEngine.Collision collision)
@@ -49,19 +44,20 @@ public class MissileCollision : MonoBehaviour
             ChangeAstroid();
             Destroy(collision.collider.gameObject);
             
+            Destroy(gameObject);//so that we don't create another explosion in the Missile script
+
             ExplodeAstroid();
-            //the missile is then destroyed in the Missile script
         }
     }
     public void ChangeAstroid()//changes the astroid with the cracked prefab
     {
         crackedAstroidObject = Instantiate(crackedAstroidPrefab, ObstacleTransform.position,
             ObstacleTransform.rotation);
-        crackedAstroidStartTime = Time.timeSinceLevelLoad;
+        Destroy(crackedAstroidObject, timeForCrackedAstroidDestruction);
     }
     public void ExplodeAstroid()//public so it can be used in Missile script
     {
-        Instantiate(explosionEffect, transform.position, transform.rotation);
+        Instantiate(explosionEffect, shootMissileScript.targetTransform.position, Quaternion.identity);
 
         Collider[] collidersToMove = Physics.OverlapSphere(transform.position, searchRadius);
 

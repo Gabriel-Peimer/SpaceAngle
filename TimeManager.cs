@@ -19,7 +19,7 @@ public class TimeManager : MonoBehaviour
         }
     }
     void Update()
-    {
+    {/*
         if (playerHealth.currentHealth > 0.05f && playerMovement.hasTouchEnded == true)
         {
             Time.timeScale += (1f / slowDownLength) * Time.unscaledDeltaTime;
@@ -31,7 +31,7 @@ public class TimeManager : MonoBehaviour
         {
             Time.timeScale += (2f / slowDownLength) * Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
-        }
+        }*/
     }
     
 }

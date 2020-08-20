@@ -28,6 +28,7 @@ public class Missile : MonoBehaviour
     public Transform targetTransform;
     public GameObject targetObject;
     public ObstacleMovement obstacleMovementScript;
+    public GameObject explosionEffect;//if the target is destroyed
 
     private void Start()
     {
@@ -47,12 +48,21 @@ public class Missile : MonoBehaviour
             if (missileObject != null && targetObject != null)
             {
                 Vector3 direction = targetTransform.position - missileObject.transform.position;
+                
                 direction.Normalize();//so that we can cross the direction and the missile position
 
                 float rotateAmount = Vector3.Cross(direction, missileObject.transform.forward).y;//crossing
 
                 missileRigidbody.angularVelocity = new Vector3(0, -rotateAmount * missileRotateSpeed, 0);
 
+                if (targetTransform.position.z < missileObject.transform.position.z)
+                {
+                    missileSpeed = 15;
+                }
+                else
+                {
+                    missileSpeed = 7;
+                }
                 missileRigidbody.velocity = missileObject.transform.forward * missileSpeed;
             }
 
@@ -69,6 +79,7 @@ public class Missile : MonoBehaviour
             }
             else if (targetObject == null && missileObject != null)
             {
+                Instantiate(explosionEffect, missileObject.transform.position, Quaternion.identity);
                 Destroy(missileObject.gameObject);
             }
         }
