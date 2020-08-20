@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Missile : MonoBehaviour
 {
@@ -13,17 +14,23 @@ public class Missile : MonoBehaviour
     public float timeBetweenPossibleShots = 2f;//the player will be able to shoot every x seconds
     private bool isShotPossible;
 
-
     //Constants for the script/ things that upgrades will not change
     //GameMaster
     private GameObject gameMasterObject;
     private GameMaster gameMaster;
+
     //missile
     private Rigidbody missileRigidbody;
     public GameObject missilePrefab;
     public GameObject missileObject;
     public Vector3 offsetForMissileShot;//offset from the player
     public Transform playerTransform;//so that we can shoot the missile from the player location
+    //missile indicator
+    public Image missileIndicator;
+        //colors
+    private Color32 missileShotIsPossibleColor = new Color32(100, 225, 215, 255);
+    private Color32 missileShotIsNotPossibleColor = new Color32(230, 140, 90, 255);
+
     //target-astroid
     public Transform targetTransform;
     public GameObject targetObject;
@@ -35,10 +42,12 @@ public class Missile : MonoBehaviour
         gameMasterObject = GameObject.Find("GameMaster");
         gameMaster = gameMasterObject.GetComponent<GameMaster>();
     }
+
     private void FixedUpdate()
     {
         if (gameMaster.missileUpgradeValue > 0)
         {
+            MissileShootIndicator();
             if (timeForPossibleShot < Time.timeSinceLevelLoad)
             {
                 isShotPossible = true;
@@ -83,11 +92,28 @@ public class Missile : MonoBehaviour
                 Destroy(missileObject.gameObject);
             }
         }
+        else
+        {
+            missileIndicator.enabled = false;
+        }
     }
     void ShootTheMissile()
     {
         missileObject = Instantiate(missilePrefab, playerTransform.position + offsetForMissileShot,
             Quaternion.identity);
         missileRigidbody = missileObject.GetComponent<Rigidbody>();
+    }
+    private void MissileShootIndicator()
+    {
+        missileIndicator.enabled = true;
+
+        if (isShotPossible)
+        {
+            missileIndicator.GetComponent<Image>().color = missileShotIsPossibleColor;
+        }
+        else if (isShotPossible == false)
+        {
+            missileIndicator.GetComponent<Image>().color = missileShotIsNotPossibleColor;
+        }
     }
 }

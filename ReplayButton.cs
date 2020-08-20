@@ -6,8 +6,12 @@ public class ReplayButton : MonoBehaviour
 {
     public RandomGeneratingObstacles obstacleGeneration;
     public float restartDelay = 1f;
-    public GameObject replayButton;
+
+    //things to hide
     public GameObject healthBar;
+    public Image missileIndicator;
+
+    public GameObject replayButton;
     public GameObject goToShopButton;
 
     public void Replay()
@@ -31,5 +35,6 @@ public class ReplayButton : MonoBehaviour
     public void HideHealthBar()
     {
         healthBar.SetActive(false);
+        missileIndicator.enabled = false;
     }
 }
