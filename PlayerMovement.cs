@@ -24,7 +24,8 @@ public class PlayerMovement : MonoBehaviour
     //for rotation and velocity (mobile)
     public float sideForceMobile = 200f;
     private float rotationSpeed = 5f;
-    private double angleToTurn;
+    private double angleToRotate;
+    private float maxRotation = 45f;
 
     //time
     private float startTime;
@@ -34,8 +35,10 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         dragDistance = Screen.height * 5 / 100;
+
         GameObject gameMasterObject = GameObject.Find("GameMaster");
         GameMaster gameMaster = gameMasterObject.GetComponent<GameMaster>();
+
         GameManager.LoadProgress(gameMaster);
     }
     void FixedUpdate()
@@ -44,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey("d") && !Input.GetKey("a"))
         {
             player.AddForce(sideForceComputer * Time.fixedDeltaTime, 0, 0);
+
             if (transform.rotation.eulerAngles.y < 38 || transform.rotation.eulerAngles.y > 319)// || transform.rotation.z > 90)
             {
                 rotation.y = -100f;
@@ -53,13 +57,14 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey("a") && !Input.GetKey("d"))
         {
             player.AddForce(-sideForceComputer * Time.fixedDeltaTime, 0, 0);
+
             if (transform.rotation.eulerAngles.y > 322 || transform.rotation.eulerAngles.y < 41)//|| rb.rotation.z < 90)
             {
                 rotation.y = 100f;
                 transform.Rotate(rotation * Time.fixedDeltaTime);
             }
         }
-        if (Input.GetKey("m"))
+        if (Input.GetKey("w"))
         {
             timeManager.DoSlowmotion();
         }
@@ -71,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
             {
+                timeManager.DoSlowmotion();//starts slow-motion
+
                 startTime = Time.time;//saving to find the length (in time) of the swipe
                 
                 firstPosition = touch.position;
@@ -82,6 +89,8 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (touch.phase == TouchPhase.Ended)
             {
+                timeManager.shouldSlowMmotionStop = true;
+
                 endTime = Time.time;//to see the time that the swipe takes
                 swipeTime = endTime - startTime;//finding the length in time of the swipe
 
@@ -105,18 +114,42 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //rotating the ship
-        angleToTurn = 90 - Math.Atan(Math.Abs(deltaY) / Math.Abs(deltaX));
-        
-        if (angleToTurn > 45) { angleToTurn = 45; }//clamping to value
-        if (deltaX > 0 && player.transform.rotation.eulerAngles.y < angleToTurn)//right turn and still needs rotating
+        Rotate();
+
+        /*
+            if (deltaX > 0 && player.transform.rotation.eulerAngles.y < angleToRotate)//right turn and still needs rotating
         {
             player.transform.Rotate(0, -rotationSpeed, 0);
         }
         //the nect code will be run only if it's a left turn and it didn't pass the angleToTurn
-        if (deltaX < 0 && player.transform.rotation.eulerAngles.y > 360 - angleToTurn || 
+        if (deltaX < 0 && player.transform.rotation.eulerAngles.y > 360 - angleToRotate || 
             deltaX < 0 && player.transform.rotation.eulerAngles.y > 0)
         {
             player.transform.Rotate(0, rotationSpeed, 0);
+        }*/
+    }
+    private void Rotate()
+    {
+        angleToRotate = 90 - Math.Atan(Math.Abs(deltaY) / Math.Abs(deltaX));
+
+        if (angleToRotate > maxRotation) { angleToRotate = maxRotation; }//clamping to value
+
+        if (player != null)//when the player explodes an error will appear unless we check for the player
+        {
+            if (player.transform.rotation.eulerAngles.y >= 0 &&
+                player.transform.rotation.eulerAngles.y < angleToRotate ||
+                player.transform.rotation.eulerAngles.y < 0 &&
+                player.transform.rotation.eulerAngles.y > -angleToRotate)
+            {
+                if (deltaX > 0)
+                {
+                    player.transform.Rotate(0, -rotationSpeed, 0);
+                }
+                if (deltaX < 0)
+                {
+                    player.transform.Rotate(0, rotationSpeed, 0);
+                }
+            }
         }
     }
 }

@@ -17,6 +17,9 @@ public class AudioManager : MonoBehaviour
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
         }
+    }
+    private void Start()
+    {
         PlayAudio("MainTheme");
     }
 
@@ -25,5 +28,11 @@ public class AudioManager : MonoBehaviour
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null){ return; }
         s.source.Play();
+    }
+    public void StopAudio(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null) { return; }
+        s.source.Stop();
     }
 }

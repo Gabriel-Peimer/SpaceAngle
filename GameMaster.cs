@@ -4,20 +4,14 @@ using UnityEngine;
 
 public class GameMaster : MonoBehaviour
 {
-    //public static int highScore;
-    //public static int missileUpgradeValue;
-    //public static int slowMotionUpgradeValue;
-
+    //high-score
     public int playerHighScore = 0;
+    //shop upgrades
     public int missileUpgradeValue = 0;
     public int slowMotionUpgradeValue = 0;
+    //coin system
+    public float coinCount = 0;
 
-    /*private void Update()
-    {
-        highScoreMaster = highScore;
-        missileUpgradeValueMaster = missileUpgradeValue;
-        slowMotionUpgradeValueMaster = slowMotionUpgradeValue;
-    }*/
     private void Awake()
     {
         DontDestroyOnLoad(this);

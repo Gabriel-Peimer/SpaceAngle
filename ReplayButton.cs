@@ -3,24 +3,22 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ReplayButton : MonoBehaviour
-{
-    public RandomGeneratingObstacles obstacleGeneration;
-    public float restartDelay = 1f;
+{   
+    public float restartDelay = 1f;//delay so that the player can see the ship exploding
 
-    //things to hide
+    //things to hide/show
     public GameObject healthBar;
     public Image missileIndicator;
-
     public GameObject replayButton;
     public GameObject goToShopButton;
 
     public void Replay()
     {
         Invoke("Restart", restartDelay);
+        GameManager.gameHasEnded = false;
     }
     public void Restart()
     {
-        obstacleGeneration.score = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void GoToShop()
