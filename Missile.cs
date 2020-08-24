@@ -51,6 +51,7 @@ public class Missile : MonoBehaviour
         }
         else
         {
+            Debug.Log("False");
             missileIndicator.SetActive(false);
         }
     }

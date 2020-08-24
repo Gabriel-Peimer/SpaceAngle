@@ -4,18 +4,28 @@ public class TimeManager : MonoBehaviour
 {
     public PlayerHealthHandling playerHealth;
 
+    //slow motion
     public float slowDownFactor = 0.05f;
     public float slowDownLength = 2f;
     public bool shouldSlowMmotionStop = false;//public so can be accessed from PlayerMovement script
+    //gameMaster (to check upgrades
+    private GameMaster gameMaster;
 
+    private void Start()
+    {
+        gameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
+    }
     public void DoSlowmotion()
     {
-        if (playerHealth.currentHealth > 0)
+        if (gameMaster.slowMotionUpgradeValue > 0)
         {
-            shouldSlowMmotionStop = false;
+            if (playerHealth.currentHealth > 0)
+            {
+                shouldSlowMmotionStop = false;
 
-            Time.timeScale = slowDownFactor;
-            Time.fixedDeltaTime = Time.timeScale * 0.02f;
+                Time.timeScale = slowDownFactor;
+                Time.fixedDeltaTime = Time.timeScale * 0.02f;
+            }
         }
     }
     void Update()
