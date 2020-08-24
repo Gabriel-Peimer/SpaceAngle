@@ -17,10 +17,11 @@ public class Shop : MonoBehaviour
     private float showNotEnoughFundsStart;
     private float showNotEnoughFundsTime = 1f;
 
+    //Upgrades
     //missile
     public int missileUpgradeValue;
-    public int maxMissileUpgradeValue = 4;
-    private int[] missileUpgradePrice = { 0, 10, 250, 400, 800 };
+    private int maxMissileUpgradeValue = 4;
+    private int[] missileUpgradePrice = { 0, 125, 250, 400, 800 };
     public GameObject[] missileUpgradeIndicators;
     public GameObject missileMaxText;
     //slow-motion
@@ -29,6 +30,13 @@ public class Shop : MonoBehaviour
     private int[] slowMotionUpgradePrice = { 0, 10, 60, 180, 360 };
     public GameObject[] slowMotionUpgradeIndicators;
     public GameObject slowMotionMaxText;
+    //score-speed
+    public int scoreSpeedUpgradeValue;
+    private int maxScoreSpeedUpgradeValue = 4;
+    private int[] scoreSpeedUpgradePrice = { 0, 30, 75, 220, 500 };
+    public GameObject[] scoreSpeedUpgradeIndicators;
+    public GameObject scoreSpeedMaxText;
+
     //colors for indicators
     Color32 whiteColor = new Color32(255, 255, 255, 255);
 
@@ -49,73 +57,78 @@ public class Shop : MonoBehaviour
         coinCountText.text = gameMaster.coinCount.ToString();
 
         //checking if to show max text for upgrades
-        CheckMaxMissile();
-        CheckMaxSlowMotion();
+        CheckMaxUpgrade(gameMaster.scoreSpeedUpgradeValue, maxScoreSpeedUpgradeValue, scoreSpeedMaxText);
+        CheckMaxUpgrade(gameMaster.slowMotionUpgradeValue, maxSlowMotionUpgradeValue, slowMotionMaxText);
+        CheckMaxUpgrade(gameMaster.missileUpgradeValue, maxMissileUpgradeValue, missileMaxText);
+
         //lighting up indicators
         LightUpIndicators(missileUpgradeIndicators, gameMaster.missileUpgradeValue);
         LightUpIndicators(slowMotionUpgradeIndicators, gameMaster.slowMotionUpgradeValue);
+        LightUpIndicators(scoreSpeedUpgradeIndicators, gameMaster.scoreSpeedUpgradeValue);
     }
     public void ReturnToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
         Destroy(audioManager);
     }
-    public void UpgradeSlowMotion()
+    private string Upgrade(int upgradeValue, int maxUpgradeValue, int[] upgradePriceArray, GameObject maxText, GameObject[] upgradeIndicators)
     {
-        if (gameMaster.slowMotionUpgradeValue < maxSlowMotionUpgradeValue)
+        if (upgradeValue < maxUpgradeValue)
         {
             //checking that the player has the appropriate number of coins
-            if (gameMaster.coinCount >= slowMotionUpgradePrice[gameMaster.slowMotionUpgradeValue])
+            if (gameMaster.coinCount >= upgradePriceArray[upgradeValue])
             {
 
                 //taking away the coins for the purchase
                 //adding 1 because that at the moment the upgrade value is 1 less than the 
                 //one the player bought
-                gameMaster.coinCount -= slowMotionUpgradePrice[gameMaster.slowMotionUpgradeValue + 1];
-
-                gameMaster.slowMotionUpgradeValue++;
-                GameManager.SaveProgress(gameMaster);
+                gameMaster.coinCount -= upgradePriceArray[upgradeValue + 1];
 
                 //updating coin count on screen
                 coinCountText.text = gameMaster.coinCount.ToString();
 
-                CheckMaxSlowMotion();
-                LightUpIndicators(slowMotionUpgradeIndicators, gameMaster.slowMotionUpgradeValue);
+                CheckMaxUpgrade(upgradeValue, maxUpgradeValue, maxText);
+                //+1 in the next line because that we didn't upgrade yet
+                LightUpIndicators(upgradeIndicators, upgradeValue + 1);
+
+                return "Y";
             }
             else
             {
                 NotEnoughFunds.SetActive(true);
                 showNotEnoughFundsStart = Time.timeSinceLevelLoad;
+                return "N";
             }
+        }return "N";
+    }
+    public void UpgradeScoreSpeed()
+    {
+        if (Upgrade(gameMaster.scoreSpeedUpgradeValue, maxScoreSpeedUpgradeValue,
+            scoreSpeedUpgradePrice, scoreSpeedMaxText, scoreSpeedUpgradeIndicators) == "Y")
+        {
+            gameMaster.scoreSpeedUpgradeValue++;
+            //saving progress
+            GameManager.SaveProgress(gameMaster);
+        }
+    }
+    public void UpgradeSlowMotion()
+    {
+        if (Upgrade(gameMaster.slowMotionUpgradeValue, maxSlowMotionUpgradeValue,
+            slowMotionUpgradePrice, slowMotionMaxText, slowMotionUpgradeIndicators) == "Y")
+        {
+            gameMaster.slowMotionUpgradeValue++;
+            //saving progress
+            GameManager.SaveProgress(gameMaster);
         }
     }
     public void UpgradeMissile()
     {
-        if (gameMaster.missileUpgradeValue < maxMissileUpgradeValue)
+        if (Upgrade(gameMaster.missileUpgradeValue, maxMissileUpgradeValue,
+            missileUpgradePrice, missileMaxText, missileUpgradeIndicators) == "Y")
         {
-            //checking that the player has the appropriate number of coins
-            if (gameMaster.coinCount >= missileUpgradePrice[gameMaster.missileUpgradeValue])
-            {
-
-                //taking away the coins for the purchase
-                //adding 1 because that at the moment the upgrade value is 1 less than the 
-                //one the player bought
-                gameMaster.coinCount -= missileUpgradePrice[gameMaster.missileUpgradeValue + 1];
-
-                gameMaster.missileUpgradeValue++;
-                GameManager.SaveProgress(gameMaster);
-
-                //updating coin count on screen
-                coinCountText.text = gameMaster.coinCount.ToString();
-
-                CheckMaxMissile();
-                LightUpIndicators(missileUpgradeIndicators, gameMaster.missileUpgradeValue);
-            }
-            else
-            {
-                NotEnoughFunds.SetActive(true);
-                showNotEnoughFundsStart = Time.timeSinceLevelLoad;
-            }
+            gameMaster.missileUpgradeValue++;
+            //saving progress
+            GameManager.SaveProgress(gameMaster);
         }
     }
     private void Update()
@@ -125,20 +138,12 @@ public class Shop : MonoBehaviour
             NotEnoughFunds.SetActive(false);
         }
     }
-    private void CheckMaxSlowMotion()
+    private void CheckMaxUpgrade(int upgradeValue, int maxUpgradeValue, GameObject maxText)
     {
         //checking if we now have max upgrade
-        if (gameMaster.slowMotionUpgradeValue == maxSlowMotionUpgradeValue)
+        if (upgradeValue == maxUpgradeValue)
         {
-            slowMotionMaxText.SetActive(true);
-        }
-    }
-    private void CheckMaxMissile()
-    {
-        //checking if we now have max upgrade
-        if (gameMaster.missileUpgradeValue == maxMissileUpgradeValue)
-        {
-            missileMaxText.SetActive(true);
+            maxText.SetActive(true);
         }
     }
     private void LightUpIndicators(GameObject[] indicators, int upgradeValue)

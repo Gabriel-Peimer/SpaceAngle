@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
             healthBar.enabled = false;
             obstacleGeneration.enabled = false;
             obstacleMovement.enabled = false;
+
+            //in case the player loses while in slow-motion
+            Time.timeScale = 1f;
             
             //sets gameHasEnded to true so that we don't keep repeating this proccess
             gameHasEnded = true;

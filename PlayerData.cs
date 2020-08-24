@@ -8,6 +8,7 @@ public class PlayerData
     //upgrades to be stored
     public int missileUpgradeValue;
     public int slowMotionUpgradeValue;
+    public int scoreSpeedUpgradeValue;
     //coin system
     public float coinCount;
     //high-score
