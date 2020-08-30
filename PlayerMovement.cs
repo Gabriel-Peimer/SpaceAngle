@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml.Serialization;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -15,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     //deltas
     public float deltaX;
     private float deltaY;
+    private float slope;
 
     private float dragDistance;//other... for later... maybe...
 
@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 lastPosition;
 
     //for rotation and velocity (mobile)
-    public float sideForceMobile = 5f;
+    public float sideForceMobile = 50f;
     private float rotationSpeed = 5f;
     private double angleToRotate;
     private float maxRotation = 45f;
@@ -100,7 +100,15 @@ public class PlayerMovement : MonoBehaviour
                 deltaX = (lastPosition.x - firstPosition.x);
                 deltaY = (lastPosition.y - firstPosition.y);
 
-                CalculateVelocity();
+                //calculating the slope
+                slope = deltaY / deltaX;
+                
+                if (deltaY < 0)
+                {
+                    return;
+                }
+                //simple constraints
+                slope = Mathf.Clamp(slope, -5f, 5f);
             }
         }
         if (Math.Abs(deltaY) > dragDistance || Math.Abs(deltaX) > dragDistance)//only if it's not a tap
@@ -114,19 +122,19 @@ public class PlayerMovement : MonoBehaviour
     private void RotateShip()
     {
         //calculating angleToRotate (converting Atan result from radians to degrees)
-        angleToRotate = 90 - ((180 / Math.PI) * Math.Atan(Math.Abs(deltaY) / Math.Abs(deltaX)));
+        angleToRotate = (90 - ((180 / Math.PI) * Math.Atan(Math.Abs(deltaY) / Math.Abs(deltaX))));
 
         if (angleToRotate > maxRotation) { angleToRotate = maxRotation; }//clamping to value
 
         if (player != null)//when the player explodes an error will appear unless we check for the player
         {
             if (deltaX > 0 && player.transform.rotation.eulerAngles.y < angleToRotate ||
-                deltaX > 0 && player.transform.rotation.eulerAngles.y > 360 - 45)
+                deltaX > 0 && player.transform.rotation.eulerAngles.y > 361 - maxRotation)
             {
                 player.transform.Rotate(0, -rotationSpeed, 0);
             }
-            if (deltaX < 0 && player.transform.rotation.eulerAngles.y > 362 - 45 ||
-                deltaX < 0 && player.transform.rotation.eulerAngles.y < angleToRotate + 1)
+            if (deltaX < 0 && player.transform.rotation.eulerAngles.y < maxRotation + 1 ||
+                deltaX < 0 && player.transform.rotation.eulerAngles.y > 360 - angleToRotate)
             {
                 player.transform.Rotate(0, rotationSpeed, 0);
             }
@@ -134,28 +142,27 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MoveShip()
     {
-        if (firstPosition.x < lastPosition.x)//right swipe
+        CalculateVelocity();//calculating before rotating
+
+        if (deltaX > 0)//it's a right swipe
         {
-            player.AddForce(velocityForSwipe * sideForceMobile * Time.fixedDeltaTime, 0, 0);
+            player.AddForce(velocityForSwipe * Time.fixedDeltaTime, 0, 0);
         }
-        if (firstPosition.x > lastPosition.x)//it's a left swipe
+        if (deltaX < 0)//it's a left swipe
         {
             //we don't add -sideForce in the next line because 
             //that if we swipe left the velocityForSwipe is negative
-            player.AddForce(velocityForSwipe * sideForceMobile * Time.fixedDeltaTime, 0, 0);
+            player.AddForce(velocityForSwipe * Time.fixedDeltaTime, 0, 0);
         }
     }
     private void CalculateVelocity()
     {
-        velocityForSwipe = deltaX / (swipeTime); //Velocity = Distance / Time
-        if (velocityForSwipe > 3f)
-        {
-            velocityForSwipe = 3f;
-        }
-        else if (velocityForSwipe < -3f)
-        {
-            velocityForSwipe = -3f;
-        }
-        Debug.Log(velocityForSwipe);
+        velocityForSwipe = sideForceMobile * sideForceMobile / slope;
+        Debug.Log(slope + " S");
+        //clamping the value so that the player can't go too quickly
+        velocityForSwipe = Mathf.Clamp(velocityForSwipe,
+            -sideForceMobile *sideForceMobile, sideForceMobile * sideForceMobile);
+
+        Debug.Log(velocityForSwipe + " V");
     }
 }

@@ -10,6 +10,7 @@ public class MissileCollision : MonoBehaviour
     private float searchRadius = 2f;
     public GameObject explosionEffect;
     public float explosionForce = 300f;
+    //obstacle
     public GameObject crackedAstroidPrefab;
     private Transform ObstacleTransform;
     private GameObject crackedAstroidObject;
@@ -47,7 +48,9 @@ public class MissileCollision : MonoBehaviour
             Destroy(gameObject);//so that we don't create another explosion in the Missile script
 
             ExplodeAstroid();
-        }
+
+            CameraShake.shouldShake = true;
+}
     }
     public void ChangeAstroid()//changes the astroid with the cracked prefab
     {

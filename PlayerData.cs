@@ -18,6 +18,7 @@ public class PlayerData
     {
         missileUpgradeValue = gameMaster.missileUpgradeValue;
         slowMotionUpgradeValue = gameMaster.slowMotionUpgradeValue;
+        scoreSpeedUpgradeValue = gameMaster.scoreSpeedUpgradeValue;
 
         coinCount = gameMaster.coinCount;
 

@@ -3,14 +3,18 @@ using UnityEngine;
 
 public class Collision : MonoBehaviour
 {
+    //constant scripts
+    public GameManager gameManager;
+
+    //player
     public GameObject player;
     public Rigidbody playerRigidbody;
-    public GameManager gameManager;
+
+    //prefabs
     public GameObject crackedAstroidPrefab;//for ChangeAstroid
     public GameObject crackedShipPrefab;
-
+    //for explosion
     public GameObject explosionEffect;
-
     public float explosionForce = 300f;
     public float searchRadius = 2f;
     private float explosionForceForAstroid = 50;
@@ -25,11 +29,15 @@ public class Collision : MonoBehaviour
             ChangeAstroid(collision.collider.gameObject);//swapes astroid with cracked mesh
             ExplodeAstroid();//explodes astroid
 
+            CameraShake.shouldShake = true;//camera shake
+
             gameManager.GameOver();
         }else if (collision.collider.tag == "WallClone")
         {
             ChangeShip();//swapes ship with cracked mesh
             Explode();//explodes ship
+
+            CameraShake.shouldShake = true;//camera shake
 
             gameManager.GameOver();
         }

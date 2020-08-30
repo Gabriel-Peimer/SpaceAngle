@@ -12,9 +12,10 @@ public class GameManager : MonoBehaviour
 
     public Rigidbody player;//so that the player doesn't stay frozen (turning off constraints)
     
-    //gameMaster
+    //gameMaster and timeManager
     private GameObject gameMasterObject;
     private GameMaster gameMaster;
+    public TimeManager timeManager;
 
     //scripts and objects that need to be turned off at the end off the game
     public PlayerMovement movement;
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviour
 
             //in case the player loses while in slow-motion
             Time.timeScale = 1f;
+            timeManager.shouldSlowMmotionStop = true;
             
             //sets gameHasEnded to true so that we don't keep repeating this proccess
             gameHasEnded = true;
@@ -72,6 +74,7 @@ public class GameManager : MonoBehaviour
         //upgrades
         gameMaster.missileUpgradeValue = data.missileUpgradeValue;
         gameMaster.slowMotionUpgradeValue = data.slowMotionUpgradeValue;
+        gameMaster.scoreSpeedUpgradeValue = data.scoreSpeedUpgradeValue;
         //high-score
         gameMaster.playerHighScore = data.playerHighScore;
         //coins

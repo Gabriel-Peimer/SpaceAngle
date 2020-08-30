@@ -51,7 +51,6 @@ public class Missile : MonoBehaviour
         }
         else
         {
-            Debug.Log("False");
             missileIndicator.SetActive(false);
         }
     }
@@ -103,6 +102,8 @@ public class Missile : MonoBehaviour
             {
                 Instantiate(explosionEffect, missileObject.transform.position, Quaternion.identity);
                 Destroy(missileObject.gameObject);
+                
+                CameraShake.shouldShake = true;//camera shake
             }
         }
     }
