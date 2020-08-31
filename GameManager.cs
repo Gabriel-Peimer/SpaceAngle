@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
@@ -12,7 +14,7 @@ public class GameManager : MonoBehaviour
 
     public Rigidbody player;//so that the player doesn't stay frozen (turning off constraints)
     
-    //gameMaster and timeManager
+    //gameMaster and timeManager 
     private GameObject gameMasterObject;
     private GameMaster gameMaster;
     public TimeManager timeManager;

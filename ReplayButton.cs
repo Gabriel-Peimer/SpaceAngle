@@ -6,6 +6,8 @@ public class ReplayButton : MonoBehaviour
 {   
     public float restartDelay = 1f;//delay so that the player can see the ship exploding
 
+    public SceneLoader sceneLoader;
+
     //things to hide/show
     public GameObject healthBar;
     public Image missileIndicator;
@@ -14,16 +16,12 @@ public class ReplayButton : MonoBehaviour
 
     public void Replay()
     {
-        Invoke("Restart", restartDelay);
+        sceneLoader.LoadSceneByName("Gameplay", "Start");
         GameManager.gameHasEnded = false;
-    }
-    public void Restart()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void GoToShop()
     {
-        SceneManager.LoadScene("Shop");
+        sceneLoader.LoadSceneByName("Shop", "Start");
     }
     public void ShowButtons()
     {

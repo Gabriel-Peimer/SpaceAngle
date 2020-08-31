@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
-    //shop and endscreen objects
-    public GameObject shop;
-    private GameObject audioManager;
-    private GameMaster gameMaster;
+    public GameObject shop;//the actual shop cause duh and stuff you know...
+    private GameObject audioManager;//to stop audio
+    private GameMaster gameMaster;// to save progress
+    public SceneLoader sceneLoader;// for the transitions
 
     //in order to see how many coins we have
     private int coinCount;
@@ -89,7 +89,7 @@ public class Shop : MonoBehaviour
     }
     public void ReturnToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        sceneLoader.LoadSceneByName("MainMenu", "CloseShop");
         Destroy(audioManager);
     }
     private string Upgrade(int upgradeValue, int maxUpgradeValue,

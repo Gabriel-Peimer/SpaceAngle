@@ -6,18 +6,19 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     private GameMaster gameMaster;
+    public SceneLoader sceneLoader;
     private void Awake()
     {
         gameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
     }
     public void PlayButton()
     {
-        SceneManager.LoadScene("Gameplay");
+        sceneLoader.LoadSceneByName("Gameplay", "Start");
         GameManager.LoadProgress(gameMaster);
     }
     public void ShopButton()
     {
-        SceneManager.LoadScene("Shop");
+        sceneLoader.LoadSceneByName("Shop", "Start");
         GameManager.LoadProgress(gameMaster);
     }
 }
