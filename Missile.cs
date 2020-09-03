@@ -14,9 +14,10 @@ public class Missile : MonoBehaviour
     public float timeBetweenPossibleShots = 2f;//the player will be able to shoot every x seconds
 
     //Constants for the script/ things that upgrades will not change
-    //GameMaster
     private GameObject gameMasterObject;
     private GameMaster gameMaster;
+    private CameraShake cameraShake;
+    private AudioManager audioManager;
 
     //missile
     private Rigidbody missileRigidbody;
@@ -42,6 +43,10 @@ public class Missile : MonoBehaviour
     {
         gameMasterObject = GameObject.Find("GameMaster");
         gameMaster = gameMasterObject.GetComponent<GameMaster>();
+
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+
+        cameraShake = Camera.main.GetComponent<CameraShake>();
 
         timeBetweenPossibleShots = timeBetweenShotsByUpgrade[gameMaster.missileUpgradeValue];
         
@@ -102,13 +107,18 @@ public class Missile : MonoBehaviour
             {
                 Instantiate(explosionEffect, missileObject.transform.position, Quaternion.identity);
                 Destroy(missileObject.gameObject);
-                
-                CameraShake.shouldShake = true;//camera shake
+
+                audioManager.StopAudio("FlyingRocket");//stopping sound effect
+                audioManager.PlayAudio("Explosion");//playing explosion sound effect
+
+                cameraShake.shouldShake = true;//shaking the camera
             }
         }
     }
     void ShootTheMissile()
     {
+        audioManager.PlayAudio("FlyingRocket");//starting sound effect
+
         missileObject = Instantiate(missilePrefab, playerTransform.position + offsetForMissileShot,
             Quaternion.identity);
         missileRigidbody = missileObject.GetComponent<Rigidbody>();

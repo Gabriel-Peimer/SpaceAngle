@@ -4,6 +4,7 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
+    public GameMaster gameMaster;
 
     void Awake()
     {
@@ -20,13 +21,23 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        PlayAudio("MainTheme");
+        if (gameMaster.isMusicEnabled)
+        {
+            PlayAudio("MainTheme");
+        }
     }
 
     public void PlayAudio(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null){ return; }
+        if (s.name != "MainTheme")
+        {
+            if (!gameMaster.areSoundsEnabled)
+            {
+                return;
+            }
+        }
         s.source.Play();
     }
     public void StopAudio(string name)

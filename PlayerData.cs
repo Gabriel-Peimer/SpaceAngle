@@ -13,6 +13,9 @@ public class PlayerData
     public float coinCount;
     //high-score
     public int playerHighScore;
+    //settings
+    public bool isMusicEnabled;
+    public bool areSoundsEnabled;
 
     public PlayerData(GameMaster gameMaster)
     {
@@ -23,5 +26,8 @@ public class PlayerData
         coinCount = gameMaster.coinCount;
 
         playerHighScore = gameMaster.playerHighScore;
+
+        isMusicEnabled = gameMaster.isMusicEnabled;
+        areSoundsEnabled = gameMaster.areSoundsEnabled;
     }
 }

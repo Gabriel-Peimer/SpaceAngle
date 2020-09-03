@@ -16,17 +16,20 @@ public class PlayerHealthHandling : MonoBehaviour
 
         //checking how much health the player should have according to upgrades
         maxHealth = slowMotionUpgrades[gameMaster.slowMotionUpgradeValue];
-        
-        if (gameMaster.slowMotionUpgradeValue > 0)
-        {
-            currentHealth = maxHealth;
-            healthBar.SetMaxHealth(maxHealth);
 
-            healthBar.gameObject.SetActive(true);
-        }
-        else
+        if (GameManager.gameHasEnded == false)
         {
-            healthBar.gameObject.SetActive(false);
+            if (gameMaster.slowMotionUpgradeValue > 0)
+            {
+                currentHealth = maxHealth;
+                healthBar.SetMaxHealth(maxHealth);
+
+                healthBar.gameObject.SetActive(true);
+            }
+            else
+            {
+                healthBar.gameObject.SetActive(false);
+            }
         }
     }
     

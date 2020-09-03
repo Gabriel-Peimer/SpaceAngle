@@ -15,6 +15,10 @@ public class GameMaster : MonoBehaviour
     //coin system
     public float coinCount = 0;
 
+    //settings
+    public bool isMusicEnabled = true;
+    public bool areSoundsEnabled = true;
+
     private void Awake()
     {
         DontDestroyOnLoad(this);

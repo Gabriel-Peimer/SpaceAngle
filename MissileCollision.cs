@@ -5,6 +5,8 @@ public class MissileCollision : MonoBehaviour
 {
     private Missile shootMissileScript;//so that we can destroy the missile on impact
     private GameObject player; // to access the missile script from the player
+    private CameraShake cameraShake;
+    private AudioManager audioManager;
     
     //for exploding the astroid
     private float searchRadius = 2f;
@@ -20,6 +22,9 @@ public class MissileCollision : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         shootMissileScript = player.GetComponent<Missile>();
+
+        cameraShake = Camera.main.GetComponent<CameraShake>();
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
     }
     private void Update()
     {
@@ -46,11 +51,12 @@ public class MissileCollision : MonoBehaviour
             Destroy(collision.collider.gameObject);
             
             Destroy(gameObject);//so that we don't create another explosion in the Missile script
+            audioManager.StopAudio("FlyingRocket");//stopping once the missile exploded
 
             ExplodeAstroid();
 
-            CameraShake.shouldShake = true;
-}
+            cameraShake.shouldShake = true;//shaking the camera
+        }
     }
     public void ChangeAstroid()//changes the astroid with the cracked prefab
     {
@@ -60,6 +66,8 @@ public class MissileCollision : MonoBehaviour
     }
     public void ExplodeAstroid()//public so it can be used in Missile script
     {
+        audioManager.PlayAudio("Explosion");//playing explosion sound effect
+
         Instantiate(explosionEffect, shootMissileScript.targetTransform.position, Quaternion.identity);
 
         Collider[] collidersToMove = Physics.OverlapSphere(transform.position, searchRadius);

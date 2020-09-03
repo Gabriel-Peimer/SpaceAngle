@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class Shop : MonoBehaviour
 {
     public GameObject shop;//the actual shop cause duh and stuff you know...
-    private GameObject audioManager;//to stop audio
     private GameMaster gameMaster;// to save progress
     public SceneLoader sceneLoader;// for the transitions
 
@@ -54,8 +53,6 @@ public class Shop : MonoBehaviour
 
         //gameMaster
         gameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
-        //audioManager
-        audioManager = GameObject.Find("AudioManager");
 
         GameManager.gameHasEnded = false;//otherwise the game cannot end once a player goes to shop
 
@@ -90,7 +87,6 @@ public class Shop : MonoBehaviour
     public void ReturnToMainMenu()
     {
         sceneLoader.LoadSceneByName("MainMenu", "CloseShop");
-        Destroy(audioManager);
     }
     private string Upgrade(int upgradeValue, int maxUpgradeValue,
         int[] upgradePriceArray, GameObject maxText,

@@ -5,6 +5,8 @@ public class Collision : MonoBehaviour
 {
     //constant scripts
     public GameManager gameManager;
+    private CameraShake cameraShake;
+    private AudioManager audioManager;
 
     //player
     public GameObject player;
@@ -19,25 +21,30 @@ public class Collision : MonoBehaviour
     public float searchRadius = 2f;
     private float explosionForceForAstroid = 50;
 
+    private void Start()
+    {
+        cameraShake = Camera.main.GetComponent<CameraShake>();
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+    }
     void OnCollisionEnter(UnityEngine.Collision collision)
     {
         if (collision.collider.tag == "Obstacle" ||
             collision.collider.tag == "Clone")
         {
+            cameraShake.shouldShake = true;//shaking the camera
             ChangeShip();//swapes ship with cracked mesh
             Explode();//explodes ship
             ChangeAstroid(collision.collider.gameObject);//swapes astroid with cracked mesh
             ExplodeAstroid();//explodes astroid
 
-            CameraShake.shouldShake = true;//camera shake
-
             gameManager.GameOver();
-        }else if (collision.collider.tag == "WallClone")
+        }
+        else if (collision.collider.tag == "WallClone")
         {
+            cameraShake.shouldShake = true;//shaking the camera
+
             ChangeShip();//swapes ship with cracked mesh
             Explode();//explodes ship
-
-            CameraShake.shouldShake = true;//camera shake
 
             gameManager.GameOver();
         }
@@ -57,6 +64,8 @@ public class Collision : MonoBehaviour
     }
     private void Explode()
     {
+        audioManager.PlayAudio("Explosion");//playing explosion sound effect
+
         Instantiate(explosionEffect, transform.position, transform.rotation);
 
         Collider[] collidersToMove = Physics.OverlapSphere(transform.position, searchRadius);

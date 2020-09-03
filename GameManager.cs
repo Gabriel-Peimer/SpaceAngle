@@ -81,6 +81,9 @@ public class GameManager : MonoBehaviour
         gameMaster.playerHighScore = data.playerHighScore;
         //coins
         gameMaster.coinCount = data.coinCount;
+        //settings
+        gameMaster.isMusicEnabled = data.isMusicEnabled;
+        gameMaster.areSoundsEnabled = data.areSoundsEnabled;
     }
     private void CheckForHighScore()
     {
