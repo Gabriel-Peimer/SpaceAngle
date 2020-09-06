@@ -37,6 +37,10 @@ public class MissileCollision : MonoBehaviour
         {
             Destroy(shootMissileScript.missileObject.gameObject);
         }
+        if (GameManager.gameHasEnded == true)
+        {
+            audioManager.StopAudio("FlyingRocket");
+        }
     }
 
     private void OnCollisionEnter(UnityEngine.Collision collision)

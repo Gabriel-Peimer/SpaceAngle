@@ -30,8 +30,8 @@ public class Missile : MonoBehaviour
     //missile indicator
     public GameObject missileIndicator;
         //colors
-    private Color32 missileShotIsPossibleColor = new Color32(100, 225, 215, 255);
-    private Color32 missileShotIsNotPossibleColor = new Color32(230, 140, 90, 255);
+    private Color32 missileShotIsPossibleColor = new Color32(255, 225, 255, 255);
+    private Color32 missileShotIsNotPossibleColor = new Color32(150, 150, 150, 200);
 
     //target-astroid
     public Transform targetTransform;
@@ -127,11 +127,11 @@ public class Missile : MonoBehaviour
     { 
         if (isShotPossible)
         {
-            missileIndicator.GetComponent<Image>().color = missileShotIsPossibleColor;
+            missileIndicator.GetComponent<RawImage>().color = missileShotIsPossibleColor;
         }
         else if (isShotPossible == false)
         {
-            missileIndicator.GetComponent<Image>().color = missileShotIsNotPossibleColor;
+            missileIndicator.GetComponent<RawImage>().color = missileShotIsNotPossibleColor;
         }
     }
 }

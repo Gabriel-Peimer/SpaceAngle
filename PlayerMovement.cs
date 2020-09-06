@@ -40,30 +40,33 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
-        //Computer movement for testing etc.
-        if (Input.GetKey("d") && !Input.GetKey("a"))
+        if (GameManager.gameHasEnded != true)
         {
-            player.AddForce(sideForceComputer * Time.fixedDeltaTime, 0, 0);
-
-            if (transform.rotation.eulerAngles.y < 38 || transform.rotation.eulerAngles.y > 319)// || transform.rotation.z > 90)
+            //Computer movement for testing etc.
+            if (Input.GetKey("d") && !Input.GetKey("a"))
             {
-                rotation.y = -100f;
-                transform.Rotate(rotation * Time.fixedDeltaTime);
-            }
-        }
-        if (Input.GetKey("a") && !Input.GetKey("d"))
-        {
-            player.AddForce(-sideForceComputer * Time.fixedDeltaTime, 0, 0);
+                player.AddForce(sideForceComputer * Time.fixedDeltaTime, 0, 0);
 
-            if (transform.rotation.eulerAngles.y > 322 || transform.rotation.eulerAngles.y < 41)//|| rb.rotation.z < 90)
-            {
-                rotation.y = 100f;
-                transform.Rotate(rotation * Time.fixedDeltaTime);
+                if (transform.rotation.eulerAngles.y < 38 || transform.rotation.eulerAngles.y > 319)// || transform.rotation.z > 90)
+                {
+                    rotation.y = -100f;
+                    transform.Rotate(rotation * Time.fixedDeltaTime);
+                }
             }
-        }
-        if (Input.GetKey("w"))
-        {
-            timeManager.DoSlowmotion();
+            if (Input.GetKey("a") && !Input.GetKey("d"))
+            {
+                player.AddForce(-sideForceComputer * Time.fixedDeltaTime, 0, 0);
+
+                if (transform.rotation.eulerAngles.y > 322 || transform.rotation.eulerAngles.y < 41)//|| rb.rotation.z < 90)
+                {
+                    rotation.y = 100f;
+                    transform.Rotate(rotation * Time.fixedDeltaTime);
+                }
+            }
+            if (Input.GetKey("w"))
+            {
+                timeManager.DoSlowmotion();
+            }
         }
         //end of computer movement
         

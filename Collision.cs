@@ -10,11 +10,11 @@ public class Collision : MonoBehaviour
 
     //player
     public GameObject player;
-    public Rigidbody playerRigidbody;
 
     //prefabs
     public GameObject crackedAstroidPrefab;//for ChangeAstroid
     public GameObject crackedShipPrefab;
+
     //for explosion
     public GameObject explosionEffect;
     public float explosionForce = 300f;
@@ -57,7 +57,7 @@ public class Collision : MonoBehaviour
             crackedShipPrefab.transform.rotation.eulerAngles.y;
         float zRotation = crackedShipPrefab.transform.rotation.eulerAngles.z;
         
-        Instantiate(crackedShipPrefab, playerRigidbody.transform.position,
+        Instantiate(crackedShipPrefab, player.transform.position,
             Quaternion.Euler(xRotation, yRotation, zRotation));
 
         player.SetActive(false);

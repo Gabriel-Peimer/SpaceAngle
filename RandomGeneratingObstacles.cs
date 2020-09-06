@@ -9,7 +9,8 @@ public class RandomGeneratingObstacles : MonoBehaviour
     public GameObject astroidPrefab;
     private float randomNumber;//picking a random spot in spawnCube
     //for spawn timing
-    public float timeBetweenSpawns = 1f;
+    public float[] timeBetweenSpawns = { 2f, 1.8f, 1.6f, 1.4f, 1.3f };
+    private int scoreIndex = 0;
     public float timeToSpawn = 1f;
 
     //for score timing
@@ -34,13 +35,18 @@ public class RandomGeneratingObstacles : MonoBehaviour
         if (Time.timeSinceLevelLoad >= timeToSpawn)
         {
             SpawnBlocks();
-            timeToSpawn += timeBetweenSpawns;
+            timeToSpawn += timeBetweenSpawns[scoreIndex];
         }
         //checking to add score
         if(Time.timeSinceLevelLoad >= timeToAddScore)
         {
             ScoreUpdate();
             timeToAddScore += timeBetweenAddingScore;
+        }
+        //start adding speed to spawn rate over time
+        if (score / 10 == scoreIndex + 1 && scoreIndex < timeBetweenSpawns.Length - 1)
+        {
+            scoreIndex++;
         }
     }
 

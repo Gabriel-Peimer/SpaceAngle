@@ -9,7 +9,6 @@ public class Shop : MonoBehaviour
     public SceneLoader sceneLoader;// for the transitions
 
     //in order to see how many coins we have
-    private int coinCount;
     public Text coinCountText;
     //no funds...
     public GameObject NotEnoughFunds;

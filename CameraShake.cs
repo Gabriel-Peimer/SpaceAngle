@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
+    //things that affect the camerashake
     public float shakeStrength = 0.5f;
     public float duration = 0.6f;
     private float slowDownAmount = 1f;
@@ -38,25 +39,4 @@ public class CameraShake : MonoBehaviour
             }
         }
     }
-    /*public IEnumerator ShakeCamera(float duration, float magnitude)
-    {
-        Vector3 originalPos = transform.localPosition;
-
-        float elapsed = 0.0f;
-
-        while(elapsed < duration)
-        {
-            Debug.Log(elapsed + " E " + duration);
-            float newX = Random.Range(-1f, 1f) * magnitude;
-            float newZ = Random.Range(-1f, 1f) * magnitude;
-
-            transform.localPosition = new Vector3(newX, originalPos.y, newZ);
-
-            elapsed += Time.deltaTime;
-            Debug.Log(elapsed);
-            yield return null;
-        }
-        Debug.Log("Ended");
-        transform.localPosition = originalPos;
-    }*/
 }

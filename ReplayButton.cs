@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class ReplayButton : MonoBehaviour
 {   
-    public float restartDelay = 1f;//delay so that the player can see the ship exploding
-
     public SceneLoader sceneLoader;
 
     //things to hide/show

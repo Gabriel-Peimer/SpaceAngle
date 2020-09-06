@@ -58,7 +58,6 @@ public class Settings : MonoBehaviour
             audioManager.FadeOutCaller("MainTheme", 0.03f, audioManager.sounds);
 
             isMusicEnabled = false;
-            //audioManager.StopAudio("MainTheme");
 
             toggleMusicButton.GetComponent<Image>().color = gray;//changing the color
         }
@@ -68,7 +67,6 @@ public class Settings : MonoBehaviour
             audioManager.FadeInCaller("MainTheme", 0.03f, 0.5f, audioManager.sounds);
 
             isMusicEnabled = true;
-            //audioManager.PlayAudio("MainTheme");
             toggleMusicButton.GetComponent<Image>().color = white;//changing the color
         }
         gameMaster.isMusicEnabled = isMusicEnabled;
