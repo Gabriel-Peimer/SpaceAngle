@@ -11,6 +11,7 @@ public class ReplayButton : MonoBehaviour
     public Image missileIndicator;
     public GameObject replayButton;
     public GameObject goToShopButton;
+    public GameObject rewardedVideoAdButton;
 
     public void Replay()
     {
@@ -25,6 +26,8 @@ public class ReplayButton : MonoBehaviour
     {
         replayButton.SetActive(true);
         goToShopButton.SetActive(true);
+        rewardedVideoAdButton.SetActive(true);
+
     }
     public void HideHealthBar()
     {

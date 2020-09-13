@@ -16,6 +16,8 @@ public class PlayerData
     //settings
     public bool isMusicEnabled;
     public bool areSoundsEnabled;
+    //ads
+    public int gameCount;
 
     public PlayerData(GameMaster gameMaster)
     {
@@ -29,5 +31,7 @@ public class PlayerData
 
         isMusicEnabled = gameMaster.isMusicEnabled;
         areSoundsEnabled = gameMaster.areSoundsEnabled;
+
+        gameCount = gameMaster.gameCount;
     }
 }

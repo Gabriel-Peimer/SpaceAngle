@@ -19,6 +19,9 @@ public class GameMaster : MonoBehaviour
     public bool isMusicEnabled = true;
     public bool areSoundsEnabled = true;
 
+    //for ads
+    public int gameCount = 0;
+
     private void Awake()
     {
         DontDestroyOnLoad(this);

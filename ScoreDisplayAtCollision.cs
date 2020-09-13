@@ -8,12 +8,22 @@ public class ScoreDisplayAtCollision : MonoBehaviour
     public Text scoreAtEndGameplay;//score for this game
     public Text highScoreTextAtEndGameplay;//high score in general
     public Text coinsEarnedThisRound;//to show the coins earned
+    public Text rewardedVideoAdText;//to show how much the player will get
+    public GameObject rewardedVideoGameObject;
 
     public RandomGeneratingObstacles generator;//to get the score for this round
 
     //for saving coins
     private decimal coinsThisRound;
+    //rewarded video
+    public AdManager adManager;
+    public int videoAdReward;
 
+    private void Start()
+    {
+        videoAdReward = Convert.ToInt32(Math.Round(coinsThisRound / 2));
+        rewardedVideoAdText.text = "+" + Convert.ToString(videoAdReward);
+    }
     public void TextUpdate()
     {
         scoreAtEndGameplay.text = Convert.ToString(generator.score);
@@ -35,5 +45,10 @@ public class ScoreDisplayAtCollision : MonoBehaviour
         gameMaster.coinCount += (float)coinsThisRound;
         
         GameManager.SaveProgress(gameMaster);//saving coins
+    }
+    public void RewardedVideoButton()
+    {
+        adManager.DisplayVideoAd();
+        rewardedVideoGameObject.SetActive(false);
     }
 }

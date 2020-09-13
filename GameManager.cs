@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
     public ObstacleMovement obstacleMovement;
     public Missile missileScript;
 
+    //for ads
+    public int gamesBetweenAds = 5;
+
     private void Awake()
     {
         gameMasterObject = GameObject.Find("GameMaster");
@@ -58,7 +61,14 @@ public class GameManager : MonoBehaviour
             scoreDisplayAtCollision.SetHighScore(gameMaster);
             scoreDisplayAtCollision.CoinCountUpdate(gameMaster);
 
-            //save progress (for high-score)
+            //checking if to play ads
+            gameMaster.gameCount++;
+            if (gameMaster.gameCount == gamesBetweenAds)//play ad after x games
+            {
+                GameObject.Find("AdManager").GetComponent<AdManager>().DisplayVideoAd();
+                gameMaster.gameCount = 0;
+            }
+            //save progress (for high-score & gameCount)
             SaveProgress(gameMaster);
 
             gameEndUI.SetActive(true);
@@ -84,6 +94,8 @@ public class GameManager : MonoBehaviour
         //settings
         gameMaster.isMusicEnabled = data.isMusicEnabled;
         gameMaster.areSoundsEnabled = data.areSoundsEnabled;
+        //ads
+        gameMaster.gameCount = data.gameCount;
     }
     private void CheckForHighScore()
     {
