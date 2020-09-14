@@ -19,13 +19,14 @@ public class GameManager : MonoBehaviour
     private GameMaster gameMaster;
     public TimeManager timeManager;
 
-    //scripts and objects that need to be turned off at the end off the game
+    //scripts and objects that need to be turned off/on at the beginning/end of the game
     public PlayerMovement movement;
     public RandomGeneratingObstacles obstacleGeneration;
     public HealthBar healthBar;
     public PlayerHealthHandling playerHealthHandling;
     public ObstacleMovement obstacleMovement;
     public Missile missileScript;
+    public Intro introScript;
 
     //for ads
     public int gamesBetweenAds = 5;
@@ -34,11 +35,19 @@ public class GameManager : MonoBehaviour
     {
         gameMasterObject = GameObject.Find("GameMaster");
         gameMaster = gameMasterObject.GetComponent<GameMaster>();
+        //for intro
+        if (gameMaster.isIntroScene)
+        {
+            introScript.enabled = true;
+        }
     }
     public void GameOver()
     {
         if (!gameHasEnded)
         {
+            //sets gameHasEnded to true so that we don't keep repeating this proccess
+            gameHasEnded = true;
+
             player.constraints = RigidbodyConstraints.None;
 
             //disables movement, healthbar and obstacles
@@ -51,9 +60,6 @@ public class GameManager : MonoBehaviour
             //in case the player loses while in slow-motion
             Time.timeScale = 1f;
             timeManager.shouldSlowMmotionStop = true;
-            
-            //sets gameHasEnded to true so that we don't keep repeating this proccess
-            gameHasEnded = true;
 
             //Displays score at the end of the game
             scoreDisplayAtCollision.TextUpdate();

@@ -14,6 +14,9 @@ public class MainMenu : MonoBehaviour
     //AudioManager stuff
     private GameObject[] audioManagerArray;
 
+    //for intro
+    public Intro introScript;
+
     private void Awake()
     {
         //making sure that there aren't more than 1 gameMaster at all times...
@@ -39,6 +42,7 @@ public class MainMenu : MonoBehaviour
     public void PlayButton()
     {
         sceneLoader.LoadSceneByName("Gameplay", "Start");
+        gameMaster.isIntroScene = false;
     }
     public void ShopButton()
     {
@@ -47,5 +51,10 @@ public class MainMenu : MonoBehaviour
     public void SettingsButton()
     {
         sceneLoader.LoadSceneByName("Settings", "Start");
+    }
+    public void IntroButton()
+    {
+        sceneLoader.LoadSceneByName("Gameplay", "Start");
+        gameMaster.isIntroScene = true;
     }
 }

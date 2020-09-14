@@ -22,6 +22,9 @@ public class GameMaster : MonoBehaviour
     //for ads
     public int gameCount = 0;
 
+    //for intro (not to be saved)
+    public bool isIntroScene;
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
