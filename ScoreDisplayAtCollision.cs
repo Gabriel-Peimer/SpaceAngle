@@ -21,7 +21,8 @@ public class ScoreDisplayAtCollision : MonoBehaviour
 
     private void Start()
     {
-        videoAdReward = Convert.ToInt32(Math.Round(coinsThisRound / 2));
+        decimal randomNumberForReward = (decimal)UnityEngine.Random.Range(1.25f, 2f);
+        videoAdReward = Convert.ToInt32(Math.Round(coinsThisRound / randomNumberForReward));
         rewardedVideoAdText.text = "+" + Convert.ToString(videoAdReward);
     }
     public void TextUpdate()

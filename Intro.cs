@@ -7,104 +7,111 @@ public class Intro : MonoBehaviour
 {
     //text
     public GameObject swipeText;
+    public GameObject slowMoText;
     public GameObject avoidWallsText;
     public GameObject avoidMeteorsText;
+    public GameObject missileText;
+    public GameObject missileIndicatorText;
     //next texts etc.
     private float timeForNextText;
+    private float timeBetweenText = 4f;
     private GameObject[] nextText;
     private int textCounter;
 
     //scripts
     public RandomGeneratingObstacles obstacleGeneration;
+    public ObstacleMovement obstacleMovment;
+    public Missile missileScript;
+    public MissileCollision missileCollisionScript;
     public SceneLoader sceneLoader;
+    private GameMaster gameMaster;
 
-    private Rigidbody[] rigidbodyArray;//to "stop time" kind of effect
-
-    //for avoid meteors text
-    private Vector3 offsetForAstroid = new Vector3(0f, 0f, 17f);
-    private bool astroisNotSpawned = true;
-    public Transform playerTransform;
-
-    Touch touch;
+    private bool hasTapped = false;//to check if the player tapped
 
     void Start()
     {
         obstacleGeneration.enabled = false;//so that we don't spawn obstacles
+        missileCollisionScript.enabled = false;
+        missileScript.enabled = false;
 
         swipeText.SetActive(true);//first text to be displayed
 
-        rigidbodyArray = FindObjectsOfType<Rigidbody>();
-        MakeGameObjectsKinematic();//so that the player can read peacefully
+        nextText = new GameObject[] { swipeText, slowMoText, avoidWallsText,
+            avoidMeteorsText, missileText, missileIndicatorText };//saving the order
 
-        nextText = new GameObject[] { swipeText, avoidWallsText, avoidMeteorsText };//saving the order
         textCounter = 0;//for nextText
+        gameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
     }
 
     void Update()
     {
         if (GameManager.gameHasEnded != true)
         {
-            if (timeForNextText >= 4f && timeForNextText < 6f)
+            if (timeForNextText >= timeBetweenText)
             {
-                if (Input.touchCount > 0) { touch = Input.GetTouch(0); }
-
                 try//try incase of out of bounds
                 {
-                    nextText[textCounter].SetActive(true);
-                    MakeGameObjectsKinematic();//kinda freeze time
-                }
-                catch
-                {
-                    if (astroisNotSpawned)
+                    if (gameMaster.missileUpgradeValue == 0)
                     {
-                        astroisNotSpawned = false;
-                        Instantiate(obstacleGeneration.astroidPrefab,
-                            playerTransform.position + offsetForAstroid, Quaternion.identity);
+                        if (textCounter < 4)
+                        {
+                            nextText[textCounter].SetActive(true);
+                        }
                     }
-                    return;
-                }
-            }
-            if (timeForNextText >= 6f && touch.phase == TouchPhase.Began || Input.GetKeyDown("c"))
-            {
-                GameObjectKinematicUndo();//kinda unfreeze time
-
-                timeForNextText = 0f;
-                try//try incase of out of bounds
-                {
-                    nextText[textCounter].SetActive(false);//setting the one that's active to false
-                    textCounter++;//adding to the counter
+                    else if (gameMaster.missileUpgradeValue > 0)
+                    {
+                        nextText[textCounter].SetActive(true);
+                    }
                 }
                 catch
                 {
                     return;
                 }
             }
-            /*if (textCounter == 2 && astroisNotSpawned)//it's the avoid meteors
+            try//for index out of bounds
             {
-                astroisNotSpawned = false;
-                Instantiate(obstacleGeneration.astroidPrefab,
-                    transform.position + offsetForAstroid, Quaternion.identity);
-            }*/
-            timeForNextText += Time.deltaTime;
+                if (Input.touchCount > 0) hasTapped = true;
+
+                if (hasTapped && nextText[textCounter].activeSelf ||
+                    Input.GetKeyDown("c") && nextText[textCounter].activeSelf)
+                {
+                    Debug.Log(hasTapped + "Beginning");
+                    obstacleMovment.enabled = true;//unfreeze time
+
+                    timeForNextText = 0f;
+                    try//try incase of out of bounds
+                    {
+                        nextText[textCounter].SetActive(false);//setting the one that's active to false
+                        textCounter++;//adding to the counter
+                    }
+                    catch
+                    {
+                        return;
+                    }
+                    //hasTapped = false;//resetting so that we don't speed through the intro...
+                    Debug.Log(hasTapped + "End");
+                }
+                hasTapped = false;
+            }
+            catch
+            {
+                return;
+            }
+            if (avoidMeteorsText.activeSelf)
+            {
+                obstacleGeneration.enabled = true;
+            }
+            if (missileText.activeSelf)
+            {
+                missileScript.enabled = true;
+                missileCollisionScript.enabled = true;
+            }
+            timeForNextText += Time.deltaTime;//adding time to time counter...
         }
         if (GameManager.gameHasEnded == true)
         {
             sceneLoader.LoadSceneByName("MainMenu", "Start");
             GameManager.gameHasEnded = false;
-        }
-    }
-    void MakeGameObjectsKinematic()
-    {
-        for (int i = 0; i < rigidbodyArray.Length; i++)
-        {
-            rigidbodyArray[i].isKinematic = true;
-        }
-    }
-    void GameObjectKinematicUndo()
-    {
-        for (int i = 0; i < rigidbodyArray.Length; i++)
-        {
-            rigidbodyArray[i].isKinematic = false;
         }
     }
 }

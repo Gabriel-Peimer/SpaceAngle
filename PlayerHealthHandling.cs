@@ -7,7 +7,7 @@ public class PlayerHealthHandling : MonoBehaviour
 
     public HealthBar healthBar;//for setting health
     public TimeManager timeManager;//for slowDownFactor variable
-    private float[] slowMotionUpgrades = { 0, 1f, 1.5f, 2f, 2.5f };
+    private float[] slowMotionUpgrades = { 0, 0.5f, 0.75f, 1f, 1.5f };
     private GameMaster gameMaster;
 
     void Start()
@@ -46,7 +46,7 @@ public class PlayerHealthHandling : MonoBehaviour
                 }
                 else if (Time.timeScale > timeManager.slowDownFactor)//time to recharge the health bar
                 {
-                    currentHealth += 0.5f * Time.unscaledDeltaTime;
+                    currentHealth += 0.1f * Time.unscaledDeltaTime;
                 }
                 healthBar.SetHealth(currentHealth);
             }

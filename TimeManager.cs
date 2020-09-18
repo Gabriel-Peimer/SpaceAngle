@@ -5,7 +5,7 @@ public class TimeManager : MonoBehaviour
     public PlayerHealthHandling playerHealth;
 
     //slow motion
-    public float slowDownFactor = 0.05f;
+    public float slowDownFactor = 0.2f;
     public float slowDownLength = 2f;
     public bool shouldSlowMmotionStop = false;//public so can be accessed from PlayerMovement script
     //gameMaster (to check upgrades

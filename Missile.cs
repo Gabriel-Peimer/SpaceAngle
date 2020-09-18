@@ -9,7 +9,7 @@ public class Missile : MonoBehaviour
     private bool isShotPossible;
 
     //time (will be changed with upgrades)
-    private float[] timeBetweenShotsByUpgrade = { 0f, 4f, 3f, 3.5f, 2f };
+    private float[] timeBetweenShotsByUpgrade = { 0f, 8f, 6.5f, 5.5f, 4f };
     public float timeForPossibleShot = 1f;//the player will be able to shoot once this time passes
     public float timeBetweenPossibleShots = 2f;//the player will be able to shoot every x seconds
 

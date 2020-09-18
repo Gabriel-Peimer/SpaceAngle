@@ -14,7 +14,7 @@ public class RandomGeneratingObstacles : MonoBehaviour
     public float timeToSpawn = 1f;
 
     //for score timing
-    private float timeToAddScore = 2f;//for first time
+    private float timeToAddScore = 0f;
     private float timeBetweenAddingScore = 2f;
     private float[] timeBetweenAddingScoreByUpgrade = { 2f, 1.75f, 1.5f, 1.25f, 1f };
     //score
@@ -32,7 +32,19 @@ public class RandomGeneratingObstacles : MonoBehaviour
     private void Update()
     {
         //checking to spawn obstacles
-        if (Time.timeSinceLevelLoad >= timeToSpawn)
+        if (timeToSpawn >= timeBetweenSpawns[scoreIndex])
+        {
+            SpawnBlocks();
+            timeToSpawn = 0;
+        }
+        if (timeToAddScore >= timeBetweenAddingScore)
+        {
+            ScoreUpdate();
+            timeToAddScore = 0;
+        }
+        timeToSpawn += Time.deltaTime;
+        timeToAddScore += Time.deltaTime;
+        /*if (Time.timeSinceLevelLoad >= timeToSpawn)
         {
             SpawnBlocks();
             timeToSpawn += timeBetweenSpawns[scoreIndex];
@@ -42,7 +54,7 @@ public class RandomGeneratingObstacles : MonoBehaviour
         {
             ScoreUpdate();
             timeToAddScore += timeBetweenAddingScore;
-        }
+        }*/
         //start adding speed to spawn rate over time
         if (score / 10 == scoreIndex + 1 && scoreIndex < timeBetweenSpawns.Length - 1)
         {
