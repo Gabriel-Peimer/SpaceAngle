@@ -50,12 +50,13 @@ public class GameManager : MonoBehaviour
 
             player.constraints = RigidbodyConstraints.None;
 
-            //disables movement, healthbar and obstacles
+            //disables movement, healthbar, obstacles, missile indicator etc.
             movement.enabled = false;
             playerHealthHandling.enabled = false;
             healthBar.enabled = false;
             obstacleGeneration.enabled = false;
             obstacleMovement.enabled = false;
+            missileScript.missileIndicator.SetActive(false);
 
             //in case the player loses while in slow-motion
             Time.timeScale = 1f;

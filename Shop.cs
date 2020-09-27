@@ -7,6 +7,7 @@ public class Shop : MonoBehaviour
     public GameObject shop;//the actual shop cause duh and stuff you know...
     private GameMaster gameMaster;// to save progress
     public SceneLoader sceneLoader;// for the transitions
+    public GameObject[] shopButtons;
 
     //in order to see how many coins we have
     public Text coinCountText;
@@ -215,6 +216,13 @@ public class Shop : MonoBehaviour
         {
             priceText.GetComponent<Text>().text = priceArray[upgradeValue + 1].ToString();
 
+        }
+    }
+    public void ShowShopButtons()
+    {
+        for (int i = 0; i < shopButtons.Length; i++)
+        {
+            shopButtons[i].SetActive(true);
         }
     }
 }

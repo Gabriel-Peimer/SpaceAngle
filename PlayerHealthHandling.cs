@@ -2,12 +2,12 @@
 
 public class PlayerHealthHandling : MonoBehaviour
 {
-    private float maxHealth = 2;
+    public float maxHealth = 2;
     public float currentHealth;
 
     public HealthBar healthBar;//for setting health
     public TimeManager timeManager;//for slowDownFactor variable
-    private float[] slowMotionUpgrades = { 0, 0.5f, 0.75f, 1f, 1.5f };
+    private float[] slowMotionUpgrades = { 2f, 2.75f, 3.75f, 4.5f, 5f };
     private GameMaster gameMaster;
 
     void Start()
@@ -19,37 +19,23 @@ public class PlayerHealthHandling : MonoBehaviour
 
         if (GameManager.gameHasEnded == false)
         {
-            if (gameMaster.slowMotionUpgradeValue > 0)
-            {
-                currentHealth = maxHealth;
-                healthBar.SetMaxHealth(maxHealth);
+            currentHealth = maxHealth;
+            healthBar.SetMaxHealth(maxHealth);
 
-                healthBar.gameObject.SetActive(true);
-            }
-            else
-            {
-                healthBar.gameObject.SetActive(false);
-            }
+            healthBar.gameObject.SetActive(true);
         }
     }
     
     void Update()
     {
-        if (gameMaster.slowMotionUpgradeValue > 0)
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        if (timeManager != null)
         {
-            currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
-            if (timeManager != null)
+            if (Time.timeScale <= timeManager.slowDownFactor)//time to take health away
             {
-                if (Time.timeScale <= timeManager.slowDownFactor)//time to take health away
-                {
-                    currentHealth -= 1f * Time.unscaledDeltaTime;
-                }
-                else if (Time.timeScale > timeManager.slowDownFactor)//time to recharge the health bar
-                {
-                    currentHealth += 0.1f * Time.unscaledDeltaTime;
-                }
-                healthBar.SetHealth(currentHealth);
+                currentHealth -= 1f * Time.unscaledDeltaTime;
             }
+            healthBar.SetHealth(currentHealth);
         }
     }
 }

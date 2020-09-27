@@ -3,10 +3,12 @@ using UnityEngine;
 
 public class MissileCollision : MonoBehaviour
 {
+    //constant scripts
     private Missile shootMissileScript;//so that we can destroy the missile on impact
     private GameObject player; // to access the missile script from the player
     private CameraShake cameraShake;
     private AudioManager audioManager;
+    private PlayerHealthHandling playerHealth;//to add health for slow-motion
     
     //for exploding the astroid
     private float searchRadius = 2f;
@@ -22,6 +24,7 @@ public class MissileCollision : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         shootMissileScript = player.GetComponent<Missile>();
+        playerHealth = player.GetComponent<PlayerHealthHandling>();
 
         cameraShake = Camera.main.GetComponent<CameraShake>();
         audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
@@ -55,9 +58,19 @@ public class MissileCollision : MonoBehaviour
             Destroy(collision.collider.gameObject);
             
             Destroy(gameObject);//so that we don't create another explosion in the Missile script
-            audioManager.StopAudio("FlyingRocket");//stopping once the missile exploded
 
+            try//incase the missile spawns inside a meteor and yields an error
+            {
+                audioManager.StopAudio("FlyingRocket");//stopping once the missile exploded
+            }
+            catch { return; }
+            
             ExplodeAstroid();
+
+            //the hard coding in the next line is because that it isn't reasonable to make variables
+            //because that this is a line of code that adds a little less than 1 health to the player
+            //and it will not appear anywhere else in the code ...
+            playerHealth.currentHealth += (playerHealth.maxHealth * 2) / 5;//adding slow-motion
 
             cameraShake.shouldShake = true;//shaking the camera
         }

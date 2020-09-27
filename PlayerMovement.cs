@@ -9,22 +9,22 @@ public class PlayerMovement : MonoBehaviour
 
     //for computer movement
     private Vector3 rotation;
-    public float sideForceComputer = 500f;
+    public float sideForceComputer = 700f;
 
     //deltas
     public float deltaX;
     private float deltaY;
     private float slope;
 
-    private float dragDistance;//other... for later... maybe...
+    private float dragDistance;//for swipe check (check that the player didn't just tap)
 
     //positions of mobile input
     private Vector3 firstPosition;
     private Vector3 lastPosition;
 
     //for rotation and velocity (mobile)
-    public float sideForceMobile = 50f;
-    private float rotationSpeed = 5f;
+    public float sideForceMobile = 20f;
+    private float rotationSpeed = 3f;
     private double angleToRotate;
     private float maxRotation = 45f;
     private float velocityForSwipe;
@@ -32,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
     //time
     private float startTime;
     private float endTime;
-    private float swipeTime;
 
     private void Start()
     {
@@ -69,55 +68,53 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         //end of computer movement
-        
+
         //touch input for mobile
-        if (Input.touchCount > 0)
+        if (GameManager.gameHasEnded != true)
         {
-            Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began)
+            if (Input.touchCount > 0)
             {
-                timeManager.DoSlowmotion();//starts slow-motion
-
-                startTime = Time.timeSinceLevelLoad;//saving to find the length (in time) of the swipe
-
-                firstPosition = touch.position;
-                lastPosition = touch.position;
-            }
-            else if (touch.phase == TouchPhase.Moved)
-            {
-                lastPosition = touch.position;
-            }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                timeManager.shouldSlowMmotionStop = true;
-
-                endTime = Time.timeSinceLevelLoad;//to see the time that the swipe takes
-                swipeTime = endTime - startTime;//finding the length in time of the swipe
-
-                //saves the last position for the last time
-                lastPosition = touch.position;
-
-                //calculating deltas for later use
-                deltaX = (lastPosition.x - firstPosition.x);
-                deltaY = (lastPosition.y - firstPosition.y);
-
-                //calculating the slope
-                slope = deltaY / deltaX;
-                
-                if (deltaY < 0)
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
                 {
-                    return;
+                    timeManager.DoSlowmotion();//starts slow-motion
+
+                    startTime = Time.timeSinceLevelLoad;//saving to find the length (in time) of the swipe
+
+                    firstPosition = touch.position;
+                    lastPosition = touch.position;
                 }
-                //simple constraints
-                slope = Mathf.Clamp(slope, -5f, 5f);
+                else if (touch.phase == TouchPhase.Moved)
+                {
+                    lastPosition = touch.position;
+                }
+                else if (touch.phase == TouchPhase.Ended)
+                {
+                    timeManager.shouldSlowMmotionStop = true;
+
+                    endTime = Time.timeSinceLevelLoad;//to see the time that the swipe takes
+
+                    //saves the last position for the last time
+                    lastPosition = touch.position;
+
+                    //calculating deltas for later use
+                    deltaX = (lastPosition.x - firstPosition.x);
+                    deltaY = Math.Abs(lastPosition.y - firstPosition.y);
+
+                    //calculating the slope
+                    slope = deltaY / deltaX;
+
+                    //simple constraints
+                    slope = Mathf.Clamp(slope, -5f, 5f);
+                }
             }
-        }
-        if (Math.Abs(deltaY) > dragDistance || Math.Abs(deltaX) > dragDistance)//only if it's not a tap
-        {
-            //moving the ship
-            MoveShip();
-            //rotating the ship
-            RotateShip();
+            if (Math.Abs(deltaY) > dragDistance || Math.Abs(deltaX) > dragDistance)//only if it's not a tap
+            {
+                //moving the ship
+                MoveShip();
+                //rotating the ship
+                RotateShip();
+            }
         }
     }
     private void RotateShip()
@@ -130,12 +127,12 @@ public class PlayerMovement : MonoBehaviour
         if (player != null)//when the player explodes an error will appear unless we check for the player
         {
             if (deltaX > 0 && player.transform.rotation.eulerAngles.y < angleToRotate - 2 ||
-                deltaX > 0 && player.transform.rotation.eulerAngles.y > 359 - maxRotation)
+                deltaX > 0 && player.transform.rotation.eulerAngles.y > 350 - maxRotation)
             {
                 player.transform.Rotate(0, -rotationSpeed, 0);
             }
-            if (deltaX < 0 && player.transform.rotation.eulerAngles.y < maxRotation + 1 ||
-                deltaX < 0 && player.transform.rotation.eulerAngles.y > 361 - angleToRotate)
+            if (deltaX < 0 && player.transform.rotation.eulerAngles.y < maxRotation + 10 ||
+                deltaX < 0 && player.transform.rotation.eulerAngles.y > 362 - angleToRotate)
             {
                 player.transform.Rotate(0, rotationSpeed, 0);
             }
@@ -144,17 +141,9 @@ public class PlayerMovement : MonoBehaviour
     private void MoveShip()
     {
         CalculateVelocity();//calculating before rotating
-
-        if (firstPosition.x < lastPosition.x)//it's a right swipe
-        {
-            player.AddForce(velocityForSwipe * Time.fixedDeltaTime, 0, 0);
-        }
-        if (firstPosition.x > lastPosition.x)//it's a left swipe
-        {
-            //we don't add -sideForce in the next line because 
-            //that if we swipe left the velocityForSwipe is negative
-            player.AddForce(velocityForSwipe * Time.fixedDeltaTime, 0, 0);
-        }
+        
+        //adding the force according to CalculateVelocity method
+        player.AddForce(velocityForSwipe * Time.fixedDeltaTime, 0, 0);
     }
     private void CalculateVelocity()
     {

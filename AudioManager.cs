@@ -25,10 +25,8 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        if (gameMaster.isMusicEnabled)
-        {
-            PlayAudio("MainTheme");
-        }
+        if (!gameMaster.isMusicEnabled) StopAudio("MainTheme");
+        PlayAudio("MainTheme");
     }
 
     public void PlayAudio(string name)
@@ -48,7 +46,7 @@ public class AudioManager : MonoBehaviour
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null) { return; }
-        s.source.Stop();
+        s.source.volume = 0;
     }
 
     static IEnumerator FadeIn(string name, float speed, float maxVolume, Sound[] sounds)
@@ -78,7 +76,7 @@ public class AudioManager : MonoBehaviour
 
         float audioVolume = s.source.volume;
 
-        while (s.source.volume >= speed && keepFadingOut)
+        while (s.source.volume >= 0 && keepFadingOut)
         {
             audioVolume -= speed;
             s.source.volume = audioVolume;
