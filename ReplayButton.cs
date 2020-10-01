@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ReplayButton : MonoBehaviour
 {   
     public SceneLoader sceneLoader;
+    private GameMaster gameMaster;//to check if missile upgrade is greater than 0
 
     //things to hide/show
     public GameObject healthBar;
@@ -13,6 +14,10 @@ public class ReplayButton : MonoBehaviour
     public GameObject goToShopButton;
     public GameObject rewardedVideoAdButton;
 
+    private void Start()
+    {
+        gameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
+    }
     public void Replay()
     {
         sceneLoader.LoadSceneByName("Gameplay", "Start");
@@ -32,6 +37,6 @@ public class ReplayButton : MonoBehaviour
     public void HideHealthBar()
     {
         healthBar.SetActive(false);
-        missileIndicator.enabled = false;
+        if (gameMaster.missileUpgradeValue > 0) missileIndicator.enabled = false;
     }
 }

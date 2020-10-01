@@ -51,5 +51,7 @@ public class ScoreDisplayAtCollision : MonoBehaviour
     {
         adManager.DisplayVideoAd();
         rewardedVideoGameObject.SetActive(false);
+        //to show the money that the player made from the ad
+        coinsEarnedThisRound.text = Convert.ToString(coinsThisRound + videoAdReward);
     }
 }

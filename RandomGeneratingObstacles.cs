@@ -10,7 +10,7 @@ public class RandomGeneratingObstacles : MonoBehaviour
     private float previousNumber;//to save the last meteors spawn location (so that we can spawn meteors faster)
     private float randomNumber;//picking a random spot in spawnCube
     //for spawn timing
-    public float[] timeBetweenSpawns = { 2.3f, 2f, 1.75f, 1.5f, 1.4f };
+    public float[] timeBetweenSpawns = { 2f, 1.8f, 1.5f, 1.3f, 1f };
     private int scoreIndex = 0;//to check how quickly to add score & spawn obstacles
     private float timeToSpawn = 1f;
     private bool firstMeteorSpawned = false;
