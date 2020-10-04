@@ -43,6 +43,7 @@ public class MainMenu : MonoBehaviour
     {
         sceneLoader.LoadSceneByName("Gameplay", "Start");
         gameMaster.isIntroScene = false;
+        GameManager.gameHasEnded = false;
     }
     public void ShopButton()
     {

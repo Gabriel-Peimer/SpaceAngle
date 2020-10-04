@@ -15,12 +15,12 @@ public class Settings : MonoBehaviour
     public bool areSoundsEnabled = true;//to be accessed by AudioManager script
 
     //buttons
-    public Button toggleMusicButton;
-    public Button toggleSoundsButton;
+    public Text musicButtonText;
+    public Text soundButtonText;
 
     //colors
-    private Color32 white = new Color32(255, 255, 255, 255);
-    private Color32 gray = new Color32(255, 255, 255, 150);
+    private Color32 toggledOn = new Color32(255, 255, 255, 255);
+    private Color32 toggledOff = new Color32(170, 170, 170, 200);
 
     void Start()
     {
@@ -33,20 +33,20 @@ public class Settings : MonoBehaviour
         //setting the colors as they are supposed to be
         if (isMusicEnabled)
         {
-            toggleMusicButton.GetComponent<Image>().color = white;
+            musicButtonText.color = toggledOn;
         }
         else
         {
-            toggleMusicButton.GetComponent<Image>().color = gray;
+            musicButtonText.color = toggledOff;
         }
 
         if (areSoundsEnabled)
         {
-            toggleSoundsButton.GetComponent<Image>().color = white;
+            soundButtonText.color = toggledOn;
         }
         else
         {
-            toggleSoundsButton.GetComponent<Image>().color = gray;
+            soundButtonText.color = toggledOff;
         }
     }
 
@@ -59,7 +59,7 @@ public class Settings : MonoBehaviour
 
             isMusicEnabled = false;
 
-            toggleMusicButton.GetComponent<Image>().color = gray;//changing the color
+            musicButtonText.color = toggledOff;//changing the color
         }
         else if (!isMusicEnabled)
         {
@@ -67,7 +67,7 @@ public class Settings : MonoBehaviour
             audioManager.FadeInCaller("MainTheme", 0.03f, 0.5f, audioManager.sounds);
 
             isMusicEnabled = true;
-            toggleMusicButton.GetComponent<Image>().color = white;//changing the color
+            musicButtonText.color = toggledOn;//changing the color
         }
         gameMaster.isMusicEnabled = isMusicEnabled;
     }
@@ -76,12 +76,12 @@ public class Settings : MonoBehaviour
         if (areSoundsEnabled)
         {
             areSoundsEnabled = false;
-            toggleSoundsButton.GetComponent<Image>().color = gray;//changing the color
+            soundButtonText.color = toggledOff;//changing the color
         }
         else if (!areSoundsEnabled)
         {
             areSoundsEnabled = true;
-            toggleSoundsButton.GetComponent<Image>().color = white;//changing the color
+            soundButtonText.color = toggledOn;//changing the color
         }
         gameMaster.areSoundsEnabled = areSoundsEnabled;
     }

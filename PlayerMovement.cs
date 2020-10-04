@@ -29,13 +29,12 @@ public class PlayerMovement : MonoBehaviour
     private float maxRotation = 45f;
     private float velocityForSwipe;
 
-    //time
-    private float startTime;
-    private float endTime;
-
     private void Start()
     {
         dragDistance = Screen.height * 5 / 100;
+        deltaX = 0;
+        deltaY = 0;
+        slope = 0;
     }
     void FixedUpdate()
     {
@@ -79,8 +78,6 @@ public class PlayerMovement : MonoBehaviour
                 {
                     timeManager.DoSlowmotion();//starts slow-motion
 
-                    startTime = Time.timeSinceLevelLoad;//saving to find the length (in time) of the swipe
-
                     firstPosition = touch.position;
                     lastPosition = touch.position;
                 }
@@ -92,29 +89,34 @@ public class PlayerMovement : MonoBehaviour
                 {
                     timeManager.shouldSlowMmotionStop = true;
 
-                    endTime = Time.timeSinceLevelLoad;//to see the time that the swipe takes
-
                     //saves the last position for the last time
                     lastPosition = touch.position;
 
                     //calculating deltas for later use
-                    deltaX = (lastPosition.x - firstPosition.x);
-                    deltaY = Math.Abs(lastPosition.y - firstPosition.y);
+                    //only calculate deltas if it's not a tap
+                    if (Math.Abs(lastPosition.x - firstPosition.x) > dragDistance)
+                    {
+                        deltaX = (lastPosition.x - firstPosition.x);
+                    }
+                    if (Math.Abs(lastPosition.y - firstPosition.y) > dragDistance)
+                    {
+                        deltaY = Math.Abs(lastPosition.y - firstPosition.y);
+                    }
 
                     //calculating the slope
                     slope = deltaY / deltaX;
-
                     //simple constraints
                     slope = Mathf.Clamp(slope, -5f, 5f);
                 }
             }
-            if (Math.Abs(deltaY) > dragDistance || Math.Abs(deltaX) > dragDistance)//only if it's not a tap
+            if (Math.Abs(deltaX) > dragDistance || Math.Abs(deltaY) > dragDistance)
             {
                 //moving the ship
                 MoveShip();
                 //rotating the ship
                 RotateShip();
             }
+            
         }
     }
     private void RotateShip()
