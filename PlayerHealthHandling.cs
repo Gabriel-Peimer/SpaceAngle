@@ -7,7 +7,7 @@ public class PlayerHealthHandling : MonoBehaviour
 
     public HealthBar healthBar;//for setting health
     public TimeManager timeManager;//for slowDownFactor variable
-    private float[] slowMotionUpgrades = { 1.8f, 2.25f, 2.75f, 3.5f, 4f };
+    private float[] slowMotionUpgrades = { 2f, 2.25f, 2.75f, 3.5f, 4f };
     private GameMaster gameMaster;
 
     void Start()

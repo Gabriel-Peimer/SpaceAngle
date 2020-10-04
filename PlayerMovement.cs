@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     public float deltaX;
     private float deltaY;
     private float slope;
+    private float swipeDeltaX;
+    private float swipeDeltaY;
 
     private float dragDistance;//for swipe check (check that the player didn't just tap)
 
@@ -92,16 +94,9 @@ public class PlayerMovement : MonoBehaviour
                     //saves the last position for the last time
                     lastPosition = touch.position;
 
-                    //calculating deltas for later use
-                    //only calculate deltas if it's not a tap
-                    if (Math.Abs(lastPosition.x - firstPosition.x) > dragDistance)
-                    {
-                        deltaX = (lastPosition.x - firstPosition.x);
-                    }
-                    if (Math.Abs(lastPosition.y - firstPosition.y) > dragDistance)
-                    {
-                        deltaY = Math.Abs(lastPosition.y - firstPosition.y);
-                    }
+                    //calculating deltas
+                    deltaX = (lastPosition.x - firstPosition.x);                    
+                    deltaY = Math.Abs(lastPosition.y - firstPosition.y);
 
                     //calculating the slope
                     slope = deltaY / deltaX;
