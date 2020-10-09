@@ -9,6 +9,7 @@ public class ScoreDisplayAtCollision : MonoBehaviour
     public Text highScoreTextAtEndGameplay;//high score in general
     public Text coinsEarnedThisRound;//to show the coins earned
     public Text rewardedVideoAdText;//to show how much the player will get
+    public GameObject askToWatchAd;//to show the question whether or not they want to watch the ad
     public GameObject rewardedVideoGameObject;
 
     public RandomGeneratingObstacles generator;//to get the score for this round
@@ -47,11 +48,20 @@ public class ScoreDisplayAtCollision : MonoBehaviour
         
         GameManager.SaveProgress(gameMaster);//saving coins
     }
+    public void REwardedVideoButtonQuestion()
+    {
+        askToWatchAd.SetActive(true);
+    }
     public void RewardedVideoButton()
     {
         adManager.DisplayVideoAd();
         rewardedVideoGameObject.SetActive(false);
+        askToWatchAd.SetActive(false);
         //to show the money that the player made from the ad
         coinsEarnedThisRound.text = Convert.ToString(coinsThisRound + videoAdReward);
+    }
+    public void CloseAdQuestion()
+    {
+        askToWatchAd.SetActive(false);
     }
 }
