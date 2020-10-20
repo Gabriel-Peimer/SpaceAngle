@@ -18,11 +18,15 @@ public class PlayerData
     public bool areSoundsEnabled;
     //ads
     public int gameCount;
+    //touch controls
+    public bool isJoystickActive = true;
+    //rating request
+    public bool isAskForRatingOff = false;
 
     public PlayerData(GameMaster gameMaster)
     {
         missileUpgradeValue = gameMaster.missileUpgradeValue;
-        slowMotionUpgradeValue = gameMaster.slowMotionUpgradeValue;
+        slowMotionUpgradeValue = gameMaster.shipSpeedUpgradeValue;
         scoreSpeedUpgradeValue = gameMaster.scoreSpeedUpgradeValue;
 
         coinCount = gameMaster.coinCount;

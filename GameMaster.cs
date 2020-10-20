@@ -9,7 +9,7 @@ public class GameMaster : MonoBehaviour
 
     //shop upgrades
     public int missileUpgradeValue = 0;
-    public int slowMotionUpgradeValue = 0;
+    public int shipSpeedUpgradeValue = 0;
     public int scoreSpeedUpgradeValue = 0;
     
     //coin system
@@ -24,6 +24,15 @@ public class GameMaster : MonoBehaviour
 
     //for intro (not to be saved)
     public bool isIntroScene;
+
+    //for touch controls
+    public bool isJoystickActive = true;
+
+    //for rating
+    public bool isAskForRatingOff = false;
+
+    //games between request rating (doesn't need to be saved)
+    public int gamesBetweenRatingRequest = 8;
 
     private void Awake()
     {

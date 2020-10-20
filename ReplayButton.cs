@@ -34,11 +34,6 @@ public class ReplayButton : MonoBehaviour
         rewardedVideoAdButton.SetActive(true);
 
     }
-    public void HideHealthBar()
-    {
-        healthBar.SetActive(false);
-        if (gameMaster.missileUpgradeValue > 0) missileIndicator.enabled = false;
-    }
     public void BackButton()
     {
         sceneLoader.LoadSceneByName("MainMenu", "Start");

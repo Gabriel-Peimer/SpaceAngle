@@ -18,23 +18,20 @@ public class Shop : MonoBehaviour
 
     //Upgrades
     //missile
-    public int missileUpgradeValue;
     private int maxMissileUpgradeValue = 4;
     private int[] missileUpgradePrice = { 0, 125, 250, 400, 800 };
     public GameObject[] missileUpgradeIndicators;
     public GameObject missileMaxText;
     public GameObject priceTextMissile;
     public GameObject priceTextParentMissile;
-    //slow-motion
-    public int slowMotionUpgradeValue;
-    private int maxSlowMotionUpgradeValue = 4;
-    private int[] slowMotionUpgradePrice = { 0, 10, 60, 180, 360 };
-    public GameObject[] slowMotionUpgradeIndicators;
-    public GameObject slowMotionMaxText;
-    public GameObject priceTextSlowMotion;
-    public GameObject priceTextParentSlowMotion;
+    //ship-speed
+    private int maxShipSpeedUpgradeValue = 4;
+    private int[] shipSpeedUpgradePrice = { 0, 10, 60, 180, 360 };
+    public GameObject[] shipSpeedUpgradeIndicators;
+    public GameObject shipSpeedMaxText;
+    public GameObject priceTextShipSpeed;
+    public GameObject priceTextParentShipSpeed;
     //score-speed
-    public int scoreSpeedUpgradeValue;
     private int maxScoreSpeedUpgradeValue = 4;
     private int[] scoreSpeedUpgradePrice = { 0, 30, 75, 220, 500 };
     public GameObject[] scoreSpeedUpgradeIndicators;
@@ -49,7 +46,7 @@ public class Shop : MonoBehaviour
     {
         //setting max upgrades
         maxMissileUpgradeValue = missileUpgradePrice.Length - 1;
-        maxSlowMotionUpgradeValue = slowMotionUpgradePrice.Length - 1;
+        maxShipSpeedUpgradeValue = shipSpeedUpgradePrice.Length - 1;
 
         //gameMaster
         gameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
@@ -66,14 +63,14 @@ public class Shop : MonoBehaviour
         //checking if to show max text for upgrades
         CheckMaxUpgrade(gameMaster.scoreSpeedUpgradeValue, maxScoreSpeedUpgradeValue,
             scoreSpeedMaxText, priceTextParentScoreSpeed);
-        CheckMaxUpgrade(gameMaster.slowMotionUpgradeValue, maxSlowMotionUpgradeValue,
-            slowMotionMaxText, priceTextParentSlowMotion);
+        CheckMaxUpgrade(gameMaster.shipSpeedUpgradeValue, maxShipSpeedUpgradeValue,
+            shipSpeedMaxText, priceTextParentShipSpeed);
         CheckMaxUpgrade(gameMaster.missileUpgradeValue, maxMissileUpgradeValue,
             missileMaxText, priceTextParentMissile);
 
         //lighting up indicators
         LightUpIndicators(missileUpgradeIndicators, gameMaster.missileUpgradeValue);
-        LightUpIndicators(slowMotionUpgradeIndicators, gameMaster.slowMotionUpgradeValue);
+        LightUpIndicators(shipSpeedUpgradeIndicators, gameMaster.shipSpeedUpgradeValue);
         LightUpIndicators(scoreSpeedUpgradeIndicators, gameMaster.scoreSpeedUpgradeValue);
 
         //showing the price
@@ -81,8 +78,8 @@ public class Shop : MonoBehaviour
             maxMissileUpgradeValue, missileUpgradePrice);
         PriceTextUpdate(priceTextScoreSpeed, priceTextParentScoreSpeed, gameMaster.scoreSpeedUpgradeValue,
             maxScoreSpeedUpgradeValue, scoreSpeedUpgradePrice);
-        PriceTextUpdate(priceTextSlowMotion, priceTextParentSlowMotion, gameMaster.slowMotionUpgradeValue,
-            maxSlowMotionUpgradeValue, slowMotionUpgradePrice);
+        PriceTextUpdate(priceTextShipSpeed, priceTextParentShipSpeed, gameMaster.shipSpeedUpgradeValue,
+            maxShipSpeedUpgradeValue, shipSpeedUpgradePrice);
     }
     public void ReturnToMainMenu()
     {
@@ -144,21 +141,21 @@ public class Shop : MonoBehaviour
             }
         }
     }
-    public void UpgradeSlowMotion()
+    public void UpgradeShipSpeed()
     {
-        if (Upgrade(gameMaster.slowMotionUpgradeValue, maxSlowMotionUpgradeValue,
-            slowMotionUpgradePrice, slowMotionMaxText, slowMotionUpgradeIndicators,
-            priceTextSlowMotion, priceTextParentSlowMotion) == "Y")
+        if (Upgrade(gameMaster.shipSpeedUpgradeValue, maxShipSpeedUpgradeValue,
+            shipSpeedUpgradePrice, shipSpeedMaxText, shipSpeedUpgradeIndicators,
+            priceTextShipSpeed, priceTextParentShipSpeed) == "Y")
         {
-            gameMaster.slowMotionUpgradeValue++;
+            gameMaster.shipSpeedUpgradeValue++;
             //saving progress
             GameManager.SaveProgress(gameMaster);
 
             //showing the price
-            if (gameMaster.slowMotionUpgradeValue != maxSlowMotionUpgradeValue)
+            if (gameMaster.shipSpeedUpgradeValue != maxShipSpeedUpgradeValue)
             {
-                priceTextSlowMotion.GetComponent<Text>().text =
-                    slowMotionUpgradePrice[gameMaster.slowMotionUpgradeValue + 1].ToString();
+                priceTextShipSpeed.GetComponent<Text>().text =
+                    shipSpeedUpgradePrice[gameMaster.shipSpeedUpgradeValue + 1].ToString();
             }
         }
     }

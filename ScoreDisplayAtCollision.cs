@@ -15,7 +15,7 @@ public class ScoreDisplayAtCollision : MonoBehaviour
     public RandomGeneratingObstacles generator;//to get the score for this round
 
     //for saving coins
-    private decimal coinsThisRound;
+    public decimal coinsThisRound;//used in ad manager
     //rewarded video
     public AdManager adManager;
     public int videoAdReward;
@@ -57,8 +57,6 @@ public class ScoreDisplayAtCollision : MonoBehaviour
         adManager.DisplayVideoAd();
         rewardedVideoGameObject.SetActive(false);
         askToWatchAd.SetActive(false);
-        //to show the money that the player made from the ad
-        coinsEarnedThisRound.text = Convert.ToString(coinsThisRound + videoAdReward);
     }
     public void CloseAdQuestion()
     {

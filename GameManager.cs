@@ -14,21 +14,21 @@ public class GameManager : MonoBehaviour
 
     public Rigidbody player;//so that the player doesn't stay frozen (turning off constraints)
     
-    //gameMaster and timeManager 
+    //gameMaster adManager and timeManager 
     private GameObject gameMasterObject;
     private GameMaster gameMaster;
     public TimeManager timeManager;
+    public AdManager adManager;
 
     //scripts and objects that need to be turned off/on at the beginning/end of the game
     public PlayerMovement movement;
     public RandomGeneratingObstacles obstacleGeneration;
-    public HealthBar healthBar;
-    public PlayerHealthHandling playerHealthHandling;
     public ObstacleMovement obstacleMovement;
     public Missile missileScript;
     public Intro introScript;
+    public GameObject joystick;
 
-    //for ads
+    //for ads/ratings
     public int gamesBetweenAds = 5;
 
     private void Awake()
@@ -52,15 +52,14 @@ public class GameManager : MonoBehaviour
 
             //disables movement, healthbar, obstacles, missile indicator etc.
             movement.enabled = false;
-            playerHealthHandling.enabled = false;
-            healthBar.enabled = false;
             obstacleGeneration.enabled = false;
             obstacleMovement.enabled = false;
             missileScript.missileIndicator.SetActive(false);
+            joystick.SetActive(false);
 
             //in case the player loses while in slow-motion
             Time.timeScale = 1f;
-            timeManager.shouldSlowMmotionStop = true;
+            timeManager.shouldSlowMotionStop = true;
 
             //Displays score at the end of the game
             scoreDisplayAtCollision.TextUpdate();
@@ -70,10 +69,13 @@ public class GameManager : MonoBehaviour
 
             //checking if to play ads
             gameMaster.gameCount++;
-            if (gameMaster.gameCount == gamesBetweenAds)//play ad after x games
+            if (gameMaster.gameCount % gamesBetweenAds == 0)//play ad after x games
             {
                 GameObject.Find("AdManager").GetComponent<AdManager>().DisplayVideoAd();
-                gameMaster.gameCount = 0;
+            }
+            else if (gameMaster.isAskForRatingOff != true && gameMaster.gameCount % gameMaster.gamesBetweenRatingRequest == 0)
+            {
+                adManager.askForRatingObject.SetActive(true);
             }
             //save progress (for high-score & gameCount)
             SaveProgress(gameMaster);
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
         PlayerData data = SavePlayerData.LoadPlayerData();
         //upgrades
         gameMaster.missileUpgradeValue = data.missileUpgradeValue;
-        gameMaster.slowMotionUpgradeValue = data.slowMotionUpgradeValue;
+        gameMaster.shipSpeedUpgradeValue = data.slowMotionUpgradeValue;
         gameMaster.scoreSpeedUpgradeValue = data.scoreSpeedUpgradeValue;
         //high-score
         gameMaster.playerHighScore = data.playerHighScore;
@@ -103,6 +105,10 @@ public class GameManager : MonoBehaviour
         gameMaster.areSoundsEnabled = data.areSoundsEnabled;
         //ads
         gameMaster.gameCount = data.gameCount;
+        //touch controls
+        gameMaster.isJoystickActive = data.isJoystickActive;
+        //rating
+        gameMaster.isAskForRatingOff = data.isAskForRatingOff;
     }
     private void CheckForHighScore()
     {

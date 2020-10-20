@@ -6,12 +6,17 @@ using UnityEngine.UI;
 public class Intro : MonoBehaviour
 {
     //text
-    public GameObject swipeText;
-    public GameObject slowMoText;
+    public GameObject movementText;
     public GameObject avoidWallsText;
     public GameObject avoidMeteorsText;
     public GameObject missileText;
     public GameObject missileIndicatorText;
+
+    //for missile demo
+    public GameObject circleHighlightForMissile;
+    public GameObject player;
+    private GameObject astroid;
+
     //next texts etc.
     private float timeForNextText;
     private float timeBetweenText = 4f;
@@ -34,9 +39,9 @@ public class Intro : MonoBehaviour
         missileCollisionScript.enabled = false;
         missileScript.enabled = false;
 
-        swipeText.SetActive(true);//first text to be displayed
+        movementText.SetActive(true);//first text to be displayed
 
-        nextText = new GameObject[] { swipeText, slowMoText, avoidWallsText,
+        nextText = new GameObject[] { movementText, avoidWallsText,
             avoidMeteorsText, missileText, missileIndicatorText };//saving the order
 
         textCounter = 0;//for nextText
@@ -75,7 +80,6 @@ public class Intro : MonoBehaviour
                 if (hasTapped && nextText[textCounter].activeSelf ||
                     Input.GetKeyDown("c") && nextText[textCounter].activeSelf)
                 {
-                    Debug.Log(hasTapped + "Beginning");
                     obstacleMovment.enabled = true;//unfreeze time
 
                     timeForNextText = 0f;
@@ -88,8 +92,6 @@ public class Intro : MonoBehaviour
                     {
                         return;
                     }
-                    //hasTapped = false;//resetting so that we don't speed through the intro...
-                    Debug.Log(hasTapped + "End");
                 }
                 hasTapped = false;
             }
@@ -97,14 +99,30 @@ public class Intro : MonoBehaviour
             {
                 return;
             }
-            if (avoidMeteorsText.activeSelf)
+            if (avoidMeteorsText.activeSelf && obstacleGeneration.enabled == false)
             {
                 obstacleGeneration.enabled = true;
             }
-            if (missileText.activeSelf)
+            if (missileText.activeSelf && missileScript.enabled == false)
             {
                 missileScript.enabled = true;
                 missileCollisionScript.enabled = true;
+
+                astroid = Instantiate(obstacleGeneration.astroidPrefab,
+                    player.GetComponent<Rigidbody>().position + new Vector3(0, 0, 10),//position
+                    Quaternion.identity);//rotation
+                
+                circleHighlightForMissile.GetComponent<RectTransform>().position = 
+                    Camera.main.WorldToScreenPoint(astroid.GetComponent<Rigidbody>().position);
+
+                circleHighlightForMissile.SetActive(true);
+            }else if (missileScript.enabled && astroid.gameObject != null)//if the previous if statement already happend
+            {
+                circleHighlightForMissile.GetComponent<RectTransform>().position =
+                    Camera.main.WorldToScreenPoint(astroid.GetComponent<Rigidbody>().position);
+            }else
+            {
+                circleHighlightForMissile.SetActive(false);
             }
             timeForNextText += Time.deltaTime;//adding time to time counter...
         }

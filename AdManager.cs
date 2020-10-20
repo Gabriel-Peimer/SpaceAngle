@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
@@ -6,21 +7,25 @@ using UnityEngine.Advertisements;
 public class AdManager : MonoBehaviour, IUnityAdsListener
 {
     string googlePlay_ID = "3816795";
-    bool testMode = true;
+    bool testMode = false;
     string myPlacementId = "rewardedVideo";
 
-    //for saving data
+    //gameManager and GameMaster
     private GameMaster gameMaster;
+    private GameManager gameManager;
     //for reward
     public ScoreDisplayAtCollision scoreDisplayAtCollision;
     private int rewardForVideoAd;
-    
+    //for rating question
+    public GameObject askForRatingObject;
+
     void Start()
     {
         Advertisement.AddListener(this);
         Advertisement.Initialize(googlePlay_ID, testMode);
 
         gameMaster = GameObject.FindGameObjectWithTag("GameMaster").GetComponent<GameMaster>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
     public void DisplayInterstitialAd()
     {
@@ -40,6 +45,8 @@ public class AdManager : MonoBehaviour, IUnityAdsListener
         if (showResult == ShowResult.Finished)//ad has finished
         {
             gameMaster.coinCount += rewardForVideoAd;
+            //to show the money that the player made from the ad
+            scoreDisplayAtCollision.coinsEarnedThisRound.text = Convert.ToString(scoreDisplayAtCollision.coinsThisRound + scoreDisplayAtCollision.videoAdReward);
             GameManager.SaveProgress(gameMaster);
         }
         else if (showResult == ShowResult.Skipped)//ad was skipped
@@ -75,5 +82,22 @@ public class AdManager : MonoBehaviour, IUnityAdsListener
     public void OnDestroy()
     {
         Advertisement.RemoveListener(this);
+    }
+
+    public void RateButtonDown()
+    {
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.GabrielPeimer.SpaceAngle");
+        askForRatingObject.SetActive(false);
+        gameMaster.isAskForRatingOff = true;
+    }
+    public void LaterButtonDown()
+    {
+        askForRatingObject.SetActive(false);
+        gameMaster.gamesBetweenRatingRequest = 8;
+    }
+    public void NoButtonDown()
+    {
+        askForRatingObject.SetActive(false);
+        gameMaster.gamesBetweenRatingRequest = 16;
     }
 }

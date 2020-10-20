@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 public class PlayerHealthHandling : MonoBehaviour
-{
+{/*
     public float maxHealth = 2;
     public float currentHealth;
 
@@ -15,7 +15,7 @@ public class PlayerHealthHandling : MonoBehaviour
         gameMaster = GameObject.Find("GameMaster").GetComponent<GameMaster>();
 
         //checking how much health the player should have according to upgrades
-        maxHealth = slowMotionUpgrades[gameMaster.slowMotionUpgradeValue];
+        maxHealth = slowMotionUpgrades[gameMaster.shipSpeedUpgradeValue];
 
         if (GameManager.gameHasEnded == false)
         {
@@ -37,5 +37,5 @@ public class PlayerHealthHandling : MonoBehaviour
             }
             healthBar.SetHealth(currentHealth);
         }
-    }
+    }*/
 }

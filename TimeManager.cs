@@ -7,10 +7,15 @@ public class TimeManager : MonoBehaviour
     //slow motion
     public float slowDownFactor = 0.25f;
     public float slowDownLength = 2f;
-    public bool shouldSlowMmotionStop = false;//public so can be accessed from PlayerMovement script
+
+    public bool shouldSlowMotionStop = false;//public so can be accessed from PlayerMovement script
+
     public PlayerMovement playerMovementScript;//so that we can speed up the player
+
+    //to speed up the player in slow motion so that it feels like the player has more control
     private float startingSpeedComputer;
     private float startingSpeedMobile;
+
     private void Start()
     {
         startingSpeedComputer = playerMovementScript.sideForceComputer;
@@ -18,32 +23,29 @@ public class TimeManager : MonoBehaviour
     }
     public void DoSlowmotion()
     {
-        if (playerHealth.currentHealth > 0)
+        //speeding the player up
+        if (playerMovementScript.sideForceComputer == startingSpeedComputer)
         {
-            //speeding the player up
-            if (playerMovementScript.sideForceComputer == startingSpeedComputer)
-            {
-                playerMovementScript.sideForceComputer *= 2f;
-            }
-            if (playerMovementScript.sideForceMobile == startingSpeedMobile)
-            {
-                playerMovementScript.sideForceMobile *= 2f;
-            }
+            playerMovementScript.sideForceComputer *= 2f;
+        }
+        if (playerMovementScript.sideForceMobile == startingSpeedMobile)
+        {
+            playerMovementScript.sideForceMobile *= 2f;
+        }
             
 
-            shouldSlowMmotionStop = false;
+        shouldSlowMotionStop = false;
 
-            Time.timeScale = slowDownFactor;
-            Time.fixedDeltaTime = Time.timeScale * 0.02f;
-        }
+        Time.timeScale = slowDownFactor;
+        Time.fixedDeltaTime = Time.timeScale * 0.02f;   
     }
     void Update()
     {
-        if (playerHealth.currentHealth <= 0)
+        if (true)
         {
-            shouldSlowMmotionStop = true;
+            shouldSlowMotionStop = true;
         }
-        if (shouldSlowMmotionStop)
+        if (shouldSlowMotionStop)
         {
             //resetting the speed
             playerMovementScript.sideForceComputer = startingSpeedComputer;
@@ -54,4 +56,12 @@ public class TimeManager : MonoBehaviour
             Time.fixedDeltaTime = Time.timeScale * 0.02f;
         }
     }
+/*    public void StartSlowMotion()
+    {
+        DoSlowmotion();
+    }
+    public void StopSlowMotion()
+    {
+        shouldSlowMotionStop = true;
+    }*/
 }

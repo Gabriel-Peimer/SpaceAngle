@@ -36,8 +36,6 @@ public class MainMenu : MonoBehaviour
         {
             Destroy(audioManagerArray[1].gameObject);
         }
-
-        gameMaster.gameCount = 0;//resetting game count for ads, so that we don't get an ad on game open
     }
     public void PlayButton()
     {

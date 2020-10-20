@@ -67,11 +67,6 @@ public class MissileCollision : MonoBehaviour
             
             ExplodeAstroid();
 
-            //the hard coding in the next line is because that it isn't reasonable to make variables
-            //because that this is a line of code that adds a little less than 1 health to the player
-            //and it will not appear anywhere else in the code ...
-            playerHealth.currentHealth += (playerHealth.maxHealth * 2) / 5;//adding slow-motion
-
             cameraShake.shouldShake = true;//shaking the camera
         }
     }
