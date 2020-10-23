@@ -4,11 +4,11 @@ using UnityEngine;
 public class MissileCollision : MonoBehaviour
 {
     //constant scripts
+    private TimeManager timeManager;//for slowmo
     private Missile shootMissileScript;//so that we can destroy the missile on impact
     private GameObject player; // to access the missile script from the player
     private CameraShake cameraShake;
     private AudioManager audioManager;
-    private PlayerHealthHandling playerHealth;//to add health for slow-motion
     
     //for exploding the astroid
     private float searchRadius = 2f;
@@ -22,9 +22,12 @@ public class MissileCollision : MonoBehaviour
 
     private void Start()
     {
+        //constant scripts (must be private and found this way because that this script
+        //is on a prefab)
+        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();//for slowmo
+
         player = GameObject.FindGameObjectWithTag("Player");
         shootMissileScript = player.GetComponent<Missile>();
-        playerHealth = player.GetComponent<PlayerHealthHandling>();
 
         cameraShake = Camera.main.GetComponent<CameraShake>();
         audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
@@ -78,6 +81,7 @@ public class MissileCollision : MonoBehaviour
     }
     public void ExplodeAstroid()//public so it can be used in Missile script
     {
+        timeManager.DoSlowmotion();
         audioManager.PlayAudio("Explosion");//playing explosion sound effect
 
         Instantiate(explosionEffect, shootMissileScript.targetTransform.position, Quaternion.identity);

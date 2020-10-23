@@ -2,8 +2,6 @@
 
 public class TimeManager : MonoBehaviour
 {
-    public PlayerHealthHandling playerHealth;
-
     //slow motion
     public float slowDownFactor = 0.25f;
     public float slowDownLength = 2f;
@@ -32,36 +30,19 @@ public class TimeManager : MonoBehaviour
         {
             playerMovementScript.sideForceMobile *= 2f;
         }
-            
-
-        shouldSlowMotionStop = false;
 
         Time.timeScale = slowDownFactor;
         Time.fixedDeltaTime = Time.timeScale * 0.02f;   
     }
     void Update()
     {
-        if (true)
-        {
-            shouldSlowMotionStop = true;
-        }
-        if (shouldSlowMotionStop)
-        {
-            //resetting the speed
-            playerMovementScript.sideForceComputer = startingSpeedComputer;
-            playerMovementScript.sideForceMobile = startingSpeedMobile;
+        //resetting the speed
+        playerMovementScript.sideForceComputer = startingSpeedComputer;
+        playerMovementScript.sideForceMobile = startingSpeedMobile;
 
-            Time.timeScale += (1f / slowDownLength) * Time.unscaledDeltaTime;
-            Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
-            Time.fixedDeltaTime = Time.timeScale * 0.02f;
-        }
+        Time.timeScale += (1f / slowDownLength) * Time.unscaledDeltaTime;
+        Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+        Time.fixedDeltaTime = Time.timeScale * 0.02f;
+        
     }
-/*    public void StartSlowMotion()
-    {
-        DoSlowmotion();
-    }
-    public void StopSlowMotion()
-    {
-        shouldSlowMotionStop = true;
-    }*/
 }

@@ -5,10 +5,14 @@ public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody player;
     public ObstacleMovement obstacleMovement;
+
     public TimeManager timeManager;//for slow-motion
+    public float distanceForSlowMotion;
+    public GameObject[] meteorCount;
+
     //for upgrades
     private GameMaster gameMaster;
-    private float[] scoreSpeedUpgrades = { 150f, 200f, 300f, 400f, 500f };
+    private float[] shipSpeedUpgrades = { 175f, 200f, 225f, 275f, 300f };
 
     //for computer movement
     private Vector3 rotation;
@@ -48,19 +52,19 @@ public class PlayerMovement : MonoBehaviour
         deltaY = 0;
         slope = 0;
         //to change speed
-        sideForceMobileJoystick = scoreSpeedUpgrades[gameMaster.shipSpeedUpgradeValue];
+        sideForceMobileJoystick = shipSpeedUpgrades[gameMaster.shipSpeedUpgradeValue];
     }
     void FixedUpdate()
     {
+        meteorCount = GameObject.FindGameObjectsWithTag("Clone");
         if (GameManager.gameHasEnded != true)
         {
+            for (int i = 0; i < meteorCount.Length; i++)
+            {
+                CheckDistance(transform, meteorCount[i].transform);
+            }
             CheckComputerInput();
-        }
-        //end of computer movement
 
-        //touch input for mobile
-        if (GameManager.gameHasEnded != true)
-        {
             if (gameMaster.isJoystickActive == false)//not in joystick mode
             {
                 if (Input.touchCount > 0)
@@ -142,6 +146,13 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         if (Input.GetKey("w"))
+        {
+            timeManager.DoSlowmotion();
+        }
+    }
+    private void CheckDistance(Transform player, Transform meteor)
+    {
+        if (Vector3.Distance(player.position, meteor.position) < distanceForSlowMotion)
         {
             timeManager.DoSlowmotion();
         }
